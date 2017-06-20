@@ -26,7 +26,7 @@ def make_calculator():
     # ------- Calculator tokenizing rules
 
     tokens = (
-        'NAME', 'NUMBER',
+        'NAME', 'NUMBER', 'STRING',
     )
 
     literals = ['=', '+', '-', '*', '/', '(', ')']
@@ -34,6 +34,11 @@ def make_calculator():
     t_ignore = " \t"
 
     t_NAME = r'[a-zA-Z_][a-zA-Z0-9_]*'
+
+    def t_STRING(t):
+        r'\".*?\"'
+        t.value = t.value[1:-1]
+        return t
 
     def t_NUMBER(t):
         r'\d+\.?\d*'
@@ -96,6 +101,11 @@ def make_calculator():
     def p_expression_number(p):
         "expression : NUMBER"
         p[0] = p[1]
+
+    def p_expression_string(p):
+        "expression : STRING"
+        p[0] = p[1]
+
 
     def p_expression_name(p):
         "expression : NAME"
