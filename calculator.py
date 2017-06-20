@@ -36,8 +36,11 @@ def make_calculator():
     t_NAME = r'[a-zA-Z_][a-zA-Z0-9_]*'
 
     def t_NUMBER(t):
-        r'\d+'
-        t.value = int(t.value)
+        r'\d+\.?\d*'
+        if '.' in t.value:
+            t.value = float(t.value)
+        else:
+            t.value = int(t.value)
         return t
 
     def t_newline(t):
