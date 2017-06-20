@@ -36,7 +36,7 @@ def make_calculator(current_observation=None):
 
     tokens += reserved.values()
 
-    literals = ['=', '+', '-', '*', '/', '(', ')']
+    literals = ['=', '+', '-', '*', '/', '(', ')', '[', ']']
 
     t_ignore = " \t"
 
@@ -115,6 +115,10 @@ def make_calculator(current_observation=None):
         "expression : '(' expression ')'"
         p[0] = p[2]
 
+    def p_expression_field(p):
+        "expression : expression '[' expression ']'"
+        p[0] = p[1][p[3]]
+
     def p_expression_number(p):
         "expression : NUMBER"
         p[0] = p[1]
@@ -153,7 +157,7 @@ def make_calculator(current_observation=None):
     return input
 
 # Make a calculator object and use it
-calc = make_calculator(1)
+calc = make_calculator({'details' : {'mag' : 3}})
 
 while True:
     try:
