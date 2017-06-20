@@ -25,15 +25,28 @@ def make_calculator():
 
     # ------- Calculator tokenizing rules
 
-    tokens = (
-        'NAME', 'NUMBER', 'STRING',
-    )
+    tokens = [
+        'NAME', 'NUMBER', 'STRING', 
+    ]
+
+    reserved = {
+        'in' : 'IN'
+    }
+
+    tokens += reserved.values()
 
     literals = ['=', '+', '-', '*', '/', '(', ')']
 
     t_ignore = " \t"
 
-    t_NAME = r'[a-zA-Z_][a-zA-Z0-9_]*'
+
+
+    def t_NAME(t):
+        r'[a-zA-Z_][a-zA-Z0-9_]*'
+        if t.value in reserved:
+            t.type = reserved[t.value]
+        return t
+
 
     def t_STRING(t):
         r'\".*?\"'
@@ -80,7 +93,8 @@ def make_calculator():
         '''expression : expression '+' expression
                       | expression '-' expression
                       | expression '*' expression
-                      | expression '/' expression'''
+                      | expression '/' expression
+                      | expression IN expression'''
         if p[2] == '+':
             p[0] = p[1] + p[3]
         elif p[2] == '-':
@@ -89,6 +103,8 @@ def make_calculator():
             p[0] = p[1] * p[3]
         elif p[2] == '/':
             p[0] = p[1] / p[3]
+        elif p[2] == 'in':
+            p[0] = p[1] in p[3]
 
     def p_expression_uminus(p):
         "expression : '-' expression %prec UMINUS"
