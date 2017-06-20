@@ -15,7 +15,7 @@ if sys.version_info[0] >= 3:
 # Make a calculator function
 
 
-def make_calculator():
+def make_calculator(current_observation=None):
     import ply.lex as lex
     import ply.yacc as yacc
 
@@ -30,7 +30,8 @@ def make_calculator():
     ]
 
     reserved = {
-        'in' : 'IN'
+        'in' : 'IN',
+        'observation' : 'OBSERVATION'
     }
 
     tokens += reserved.values()
@@ -122,6 +123,9 @@ def make_calculator():
         "expression : STRING"
         p[0] = p[1]
 
+    def p_expression_observation(p):
+        "expression : OBSERVATION"
+        p[0] = current_observation
 
     def p_expression_name(p):
         "expression : NAME"
@@ -149,7 +153,7 @@ def make_calculator():
     return input
 
 # Make a calculator object and use it
-calc = make_calculator()
+calc = make_calculator(1)
 
 while True:
     try:
