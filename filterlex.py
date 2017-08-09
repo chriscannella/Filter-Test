@@ -3,7 +3,7 @@ import ply.lex as lex
 # ------- Calculator tokenizing rules
 
 tokens = [
-    'NAME', 'NUMBER', 'STRING', 'ASSIGN', 'EQ', 'NEQ', 'GEQ', 'LEQ', 'SG', 'SL', 'BOOL'
+    'NAME', 'NUMBER', 'STRING', 'ASSIGN', 'EQ', 'NEQ', 'GEQ', 'LEQ', 'SG', 'SL', 'BOOL', 'POWER', 'MULTIPLY'
 ]
 
 reserved = {
@@ -19,7 +19,7 @@ reserved = {
 
 tokens += reserved.values()
 
-literals = ['+', '-', '*', '/', '(', ')', '[', ']','{', '}', ';', ':']
+literals = ['+', '-',  '/', '(', ')', '[', ']','{', '}', ';', ':']
 
 t_EQ = "=="
 t_NEQ = "!="
@@ -30,7 +30,8 @@ t_SL = "<"
 t_ASSIGN = r"="
 t_ignore = " \t"
 t_BOOL = r"true|false"
-
+t_MULTIPLY = "\*"
+t_POWER = "\*\*"
 
 
 def t_NAME(t):

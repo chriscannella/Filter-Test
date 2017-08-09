@@ -16,7 +16,7 @@ Rule 10    statement -> FILTERON expression
 Rule 11    statement -> expression
 Rule 12    expression -> expression + expression
 Rule 13    expression -> expression - expression
-Rule 14    expression -> expression * expression
+Rule 14    expression -> expression MULTIPLY expression
 Rule 15    expression -> expression / expression
 Rule 16    expression -> expression IN expression
 Rule 17    expression -> expression EQ expression
@@ -25,28 +25,28 @@ Rule 19    expression -> expression GEQ expression
 Rule 20    expression -> expression LEQ expression
 Rule 21    expression -> expression SG expression
 Rule 22    expression -> expression SL expression
-Rule 23    expression -> - expression
-Rule 24    expression -> ( expression )
-Rule 25    expression -> expression [ expression ]
-Rule 26    expression -> BOOL
-Rule 27    expression -> NUMBER
-Rule 28    expression -> STRING
-Rule 29    expression -> OBSERVATION
-Rule 30    expression -> NAME ASSIGN expression
-Rule 31    expression -> NAME
-Rule 32    expression -> TEST
+Rule 23    expression -> expression POWER expression
+Rule 24    expression -> - expression
+Rule 25    expression -> ( expression )
+Rule 26    expression -> expression [ expression ]
+Rule 27    expression -> BOOL
+Rule 28    expression -> NUMBER
+Rule 29    expression -> STRING
+Rule 30    expression -> OBSERVATION
+Rule 31    expression -> NAME ASSIGN expression
+Rule 32    expression -> NAME
+Rule 33    expression -> TEST
 
 Terminals, with rules where they appear
 
-(                    : 4 5 6 7 24
-)                    : 4 5 6 7 24
-*                    : 14
+(                    : 4 5 6 7 25
+)                    : 4 5 6 7 25
 +                    : 12
--                    : 13 23
+-                    : 13 24
 /                    : 15
 ;                    : 7 7 9
-ASSIGN               : 30
-BOOL                 : 26
+ASSIGN               : 31
+BOOL                 : 27
 ELSE                 : 6
 EQ                   : 17
 FILTERON             : 10
@@ -55,24 +55,26 @@ GEQ                  : 19
 IF                   : 5 6
 IN                   : 8 16
 LEQ                  : 20
-NAME                 : 8 30 31
+MULTIPLY             : 14
+NAME                 : 8 31 32
 NEQ                  : 18
-NUMBER               : 27
-OBSERVATION          : 29
+NUMBER               : 28
+OBSERVATION          : 30
+POWER                : 23
 SG                   : 21
 SL                   : 22
-STRING               : 28
-TEST                 : 32
+STRING               : 29
+TEST                 : 33
 WHILE                : 4
-[                    : 25
-]                    : 25
+[                    : 26
+]                    : 26
 error                : 
 {                    : 3 4 5 6 6 7 8
 }                    : 3 4 5 6 6 7 8
 
 Nonterminals, with rules where they appear
 
-expression           : 4 5 6 7 7 7 8 10 11 12 12 13 13 14 14 15 15 16 16 17 17 18 18 19 19 20 20 21 21 22 22 23 24 25 25 30
+expression           : 4 5 6 7 7 7 8 10 11 12 12 13 13 14 14 15 15 16 16 17 17 18 18 19 19 20 20 21 21 22 22 23 23 24 25 26 26 31
 statement            : 9
 statementblock       : 1 2 4 5 6 6 7 8
 statementlist        : 1 3 0
@@ -95,7 +97,7 @@ state 0
     (11) statement -> . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -104,16 +106,17 @@ state 0
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     {               shift and go to state 16
     WHILE           shift and go to state 4
@@ -139,7 +142,7 @@ state 1
     (10) statement -> FILTERON . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -148,16 +151,17 @@ state 1
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     -               shift and go to state 6
     (               shift and go to state 5
@@ -172,24 +176,25 @@ state 1
 
 state 2
 
-    (27) expression -> NUMBER .
+    (28) expression -> NUMBER .
 
-    +               reduce using rule 27 (expression -> NUMBER .)
-    -               reduce using rule 27 (expression -> NUMBER .)
-    *               reduce using rule 27 (expression -> NUMBER .)
-    /               reduce using rule 27 (expression -> NUMBER .)
-    IN              reduce using rule 27 (expression -> NUMBER .)
-    EQ              reduce using rule 27 (expression -> NUMBER .)
-    NEQ             reduce using rule 27 (expression -> NUMBER .)
-    GEQ             reduce using rule 27 (expression -> NUMBER .)
-    LEQ             reduce using rule 27 (expression -> NUMBER .)
-    SG              reduce using rule 27 (expression -> NUMBER .)
-    SL              reduce using rule 27 (expression -> NUMBER .)
-    [               reduce using rule 27 (expression -> NUMBER .)
-    ;               reduce using rule 27 (expression -> NUMBER .)
-    )               reduce using rule 27 (expression -> NUMBER .)
-    ]               reduce using rule 27 (expression -> NUMBER .)
-    {               reduce using rule 27 (expression -> NUMBER .)
+    +               reduce using rule 28 (expression -> NUMBER .)
+    -               reduce using rule 28 (expression -> NUMBER .)
+    MULTIPLY        reduce using rule 28 (expression -> NUMBER .)
+    /               reduce using rule 28 (expression -> NUMBER .)
+    IN              reduce using rule 28 (expression -> NUMBER .)
+    EQ              reduce using rule 28 (expression -> NUMBER .)
+    NEQ             reduce using rule 28 (expression -> NUMBER .)
+    GEQ             reduce using rule 28 (expression -> NUMBER .)
+    LEQ             reduce using rule 28 (expression -> NUMBER .)
+    SG              reduce using rule 28 (expression -> NUMBER .)
+    SL              reduce using rule 28 (expression -> NUMBER .)
+    POWER           reduce using rule 28 (expression -> NUMBER .)
+    [               reduce using rule 28 (expression -> NUMBER .)
+    ;               reduce using rule 28 (expression -> NUMBER .)
+    )               reduce using rule 28 (expression -> NUMBER .)
+    ]               reduce using rule 28 (expression -> NUMBER .)
+    {               reduce using rule 28 (expression -> NUMBER .)
 
 
 state 3
@@ -207,7 +212,7 @@ state 3
     (11) statement -> . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -216,16 +221,17 @@ state 3
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     {               shift and go to state 16
     WHILE           shift and go to state 4
@@ -254,10 +260,10 @@ state 4
 
 state 5
 
-    (24) expression -> ( . expression )
+    (25) expression -> ( . expression )
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -266,16 +272,17 @@ state 5
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     -               shift and go to state 6
     (               shift and go to state 5
@@ -290,10 +297,10 @@ state 5
 
 state 6
 
-    (23) expression -> - . expression
+    (24) expression -> - . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -302,16 +309,17 @@ state 6
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     -               shift and go to state 6
     (               shift and go to state 5
@@ -333,24 +341,25 @@ state 7
 
 state 8
 
-    (28) expression -> STRING .
+    (29) expression -> STRING .
 
-    +               reduce using rule 28 (expression -> STRING .)
-    -               reduce using rule 28 (expression -> STRING .)
-    *               reduce using rule 28 (expression -> STRING .)
-    /               reduce using rule 28 (expression -> STRING .)
-    IN              reduce using rule 28 (expression -> STRING .)
-    EQ              reduce using rule 28 (expression -> STRING .)
-    NEQ             reduce using rule 28 (expression -> STRING .)
-    GEQ             reduce using rule 28 (expression -> STRING .)
-    LEQ             reduce using rule 28 (expression -> STRING .)
-    SG              reduce using rule 28 (expression -> STRING .)
-    SL              reduce using rule 28 (expression -> STRING .)
-    [               reduce using rule 28 (expression -> STRING .)
-    ;               reduce using rule 28 (expression -> STRING .)
-    )               reduce using rule 28 (expression -> STRING .)
-    ]               reduce using rule 28 (expression -> STRING .)
-    {               reduce using rule 28 (expression -> STRING .)
+    +               reduce using rule 29 (expression -> STRING .)
+    -               reduce using rule 29 (expression -> STRING .)
+    MULTIPLY        reduce using rule 29 (expression -> STRING .)
+    /               reduce using rule 29 (expression -> STRING .)
+    IN              reduce using rule 29 (expression -> STRING .)
+    EQ              reduce using rule 29 (expression -> STRING .)
+    NEQ             reduce using rule 29 (expression -> STRING .)
+    GEQ             reduce using rule 29 (expression -> STRING .)
+    LEQ             reduce using rule 29 (expression -> STRING .)
+    SG              reduce using rule 29 (expression -> STRING .)
+    SL              reduce using rule 29 (expression -> STRING .)
+    POWER           reduce using rule 29 (expression -> STRING .)
+    [               reduce using rule 29 (expression -> STRING .)
+    ;               reduce using rule 29 (expression -> STRING .)
+    )               reduce using rule 29 (expression -> STRING .)
+    ]               reduce using rule 29 (expression -> STRING .)
+    {               reduce using rule 29 (expression -> STRING .)
 
 
 state 9
@@ -393,92 +402,96 @@ state 11
 
 state 12
 
-    (30) expression -> NAME . ASSIGN expression
-    (31) expression -> NAME .
+    (31) expression -> NAME . ASSIGN expression
+    (32) expression -> NAME .
 
     ASSIGN          shift and go to state 27
-    +               reduce using rule 31 (expression -> NAME .)
-    -               reduce using rule 31 (expression -> NAME .)
-    *               reduce using rule 31 (expression -> NAME .)
-    /               reduce using rule 31 (expression -> NAME .)
-    IN              reduce using rule 31 (expression -> NAME .)
-    EQ              reduce using rule 31 (expression -> NAME .)
-    NEQ             reduce using rule 31 (expression -> NAME .)
-    GEQ             reduce using rule 31 (expression -> NAME .)
-    LEQ             reduce using rule 31 (expression -> NAME .)
-    SG              reduce using rule 31 (expression -> NAME .)
-    SL              reduce using rule 31 (expression -> NAME .)
-    [               reduce using rule 31 (expression -> NAME .)
-    ;               reduce using rule 31 (expression -> NAME .)
-    )               reduce using rule 31 (expression -> NAME .)
-    ]               reduce using rule 31 (expression -> NAME .)
-    {               reduce using rule 31 (expression -> NAME .)
+    +               reduce using rule 32 (expression -> NAME .)
+    -               reduce using rule 32 (expression -> NAME .)
+    MULTIPLY        reduce using rule 32 (expression -> NAME .)
+    /               reduce using rule 32 (expression -> NAME .)
+    IN              reduce using rule 32 (expression -> NAME .)
+    EQ              reduce using rule 32 (expression -> NAME .)
+    NEQ             reduce using rule 32 (expression -> NAME .)
+    GEQ             reduce using rule 32 (expression -> NAME .)
+    LEQ             reduce using rule 32 (expression -> NAME .)
+    SG              reduce using rule 32 (expression -> NAME .)
+    SL              reduce using rule 32 (expression -> NAME .)
+    POWER           reduce using rule 32 (expression -> NAME .)
+    [               reduce using rule 32 (expression -> NAME .)
+    ;               reduce using rule 32 (expression -> NAME .)
+    )               reduce using rule 32 (expression -> NAME .)
+    ]               reduce using rule 32 (expression -> NAME .)
+    {               reduce using rule 32 (expression -> NAME .)
 
 
 state 13
 
-    (29) expression -> OBSERVATION .
+    (30) expression -> OBSERVATION .
 
-    +               reduce using rule 29 (expression -> OBSERVATION .)
-    -               reduce using rule 29 (expression -> OBSERVATION .)
-    *               reduce using rule 29 (expression -> OBSERVATION .)
-    /               reduce using rule 29 (expression -> OBSERVATION .)
-    IN              reduce using rule 29 (expression -> OBSERVATION .)
-    EQ              reduce using rule 29 (expression -> OBSERVATION .)
-    NEQ             reduce using rule 29 (expression -> OBSERVATION .)
-    GEQ             reduce using rule 29 (expression -> OBSERVATION .)
-    LEQ             reduce using rule 29 (expression -> OBSERVATION .)
-    SG              reduce using rule 29 (expression -> OBSERVATION .)
-    SL              reduce using rule 29 (expression -> OBSERVATION .)
-    [               reduce using rule 29 (expression -> OBSERVATION .)
-    ;               reduce using rule 29 (expression -> OBSERVATION .)
-    )               reduce using rule 29 (expression -> OBSERVATION .)
-    ]               reduce using rule 29 (expression -> OBSERVATION .)
-    {               reduce using rule 29 (expression -> OBSERVATION .)
+    +               reduce using rule 30 (expression -> OBSERVATION .)
+    -               reduce using rule 30 (expression -> OBSERVATION .)
+    MULTIPLY        reduce using rule 30 (expression -> OBSERVATION .)
+    /               reduce using rule 30 (expression -> OBSERVATION .)
+    IN              reduce using rule 30 (expression -> OBSERVATION .)
+    EQ              reduce using rule 30 (expression -> OBSERVATION .)
+    NEQ             reduce using rule 30 (expression -> OBSERVATION .)
+    GEQ             reduce using rule 30 (expression -> OBSERVATION .)
+    LEQ             reduce using rule 30 (expression -> OBSERVATION .)
+    SG              reduce using rule 30 (expression -> OBSERVATION .)
+    SL              reduce using rule 30 (expression -> OBSERVATION .)
+    POWER           reduce using rule 30 (expression -> OBSERVATION .)
+    [               reduce using rule 30 (expression -> OBSERVATION .)
+    ;               reduce using rule 30 (expression -> OBSERVATION .)
+    )               reduce using rule 30 (expression -> OBSERVATION .)
+    ]               reduce using rule 30 (expression -> OBSERVATION .)
+    {               reduce using rule 30 (expression -> OBSERVATION .)
 
 
 state 14
 
-    (26) expression -> BOOL .
+    (27) expression -> BOOL .
 
-    +               reduce using rule 26 (expression -> BOOL .)
-    -               reduce using rule 26 (expression -> BOOL .)
-    *               reduce using rule 26 (expression -> BOOL .)
-    /               reduce using rule 26 (expression -> BOOL .)
-    IN              reduce using rule 26 (expression -> BOOL .)
-    EQ              reduce using rule 26 (expression -> BOOL .)
-    NEQ             reduce using rule 26 (expression -> BOOL .)
-    GEQ             reduce using rule 26 (expression -> BOOL .)
-    LEQ             reduce using rule 26 (expression -> BOOL .)
-    SG              reduce using rule 26 (expression -> BOOL .)
-    SL              reduce using rule 26 (expression -> BOOL .)
-    [               reduce using rule 26 (expression -> BOOL .)
-    ;               reduce using rule 26 (expression -> BOOL .)
-    )               reduce using rule 26 (expression -> BOOL .)
-    ]               reduce using rule 26 (expression -> BOOL .)
-    {               reduce using rule 26 (expression -> BOOL .)
+    +               reduce using rule 27 (expression -> BOOL .)
+    -               reduce using rule 27 (expression -> BOOL .)
+    MULTIPLY        reduce using rule 27 (expression -> BOOL .)
+    /               reduce using rule 27 (expression -> BOOL .)
+    IN              reduce using rule 27 (expression -> BOOL .)
+    EQ              reduce using rule 27 (expression -> BOOL .)
+    NEQ             reduce using rule 27 (expression -> BOOL .)
+    GEQ             reduce using rule 27 (expression -> BOOL .)
+    LEQ             reduce using rule 27 (expression -> BOOL .)
+    SG              reduce using rule 27 (expression -> BOOL .)
+    SL              reduce using rule 27 (expression -> BOOL .)
+    POWER           reduce using rule 27 (expression -> BOOL .)
+    [               reduce using rule 27 (expression -> BOOL .)
+    ;               reduce using rule 27 (expression -> BOOL .)
+    )               reduce using rule 27 (expression -> BOOL .)
+    ]               reduce using rule 27 (expression -> BOOL .)
+    {               reduce using rule 27 (expression -> BOOL .)
 
 
 state 15
 
-    (32) expression -> TEST .
+    (33) expression -> TEST .
 
-    +               reduce using rule 32 (expression -> TEST .)
-    -               reduce using rule 32 (expression -> TEST .)
-    *               reduce using rule 32 (expression -> TEST .)
-    /               reduce using rule 32 (expression -> TEST .)
-    IN              reduce using rule 32 (expression -> TEST .)
-    EQ              reduce using rule 32 (expression -> TEST .)
-    NEQ             reduce using rule 32 (expression -> TEST .)
-    GEQ             reduce using rule 32 (expression -> TEST .)
-    LEQ             reduce using rule 32 (expression -> TEST .)
-    SG              reduce using rule 32 (expression -> TEST .)
-    SL              reduce using rule 32 (expression -> TEST .)
-    [               reduce using rule 32 (expression -> TEST .)
-    ;               reduce using rule 32 (expression -> TEST .)
-    )               reduce using rule 32 (expression -> TEST .)
-    ]               reduce using rule 32 (expression -> TEST .)
-    {               reduce using rule 32 (expression -> TEST .)
+    +               reduce using rule 33 (expression -> TEST .)
+    -               reduce using rule 33 (expression -> TEST .)
+    MULTIPLY        reduce using rule 33 (expression -> TEST .)
+    /               reduce using rule 33 (expression -> TEST .)
+    IN              reduce using rule 33 (expression -> TEST .)
+    EQ              reduce using rule 33 (expression -> TEST .)
+    NEQ             reduce using rule 33 (expression -> TEST .)
+    GEQ             reduce using rule 33 (expression -> TEST .)
+    LEQ             reduce using rule 33 (expression -> TEST .)
+    SG              reduce using rule 33 (expression -> TEST .)
+    SL              reduce using rule 33 (expression -> TEST .)
+    POWER           reduce using rule 33 (expression -> TEST .)
+    [               reduce using rule 33 (expression -> TEST .)
+    ;               reduce using rule 33 (expression -> TEST .)
+    )               reduce using rule 33 (expression -> TEST .)
+    ]               reduce using rule 33 (expression -> TEST .)
+    {               reduce using rule 33 (expression -> TEST .)
 
 
 state 16
@@ -497,7 +510,7 @@ state 16
     (11) statement -> . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -506,16 +519,17 @@ state 16
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     {               shift and go to state 16
     WHILE           shift and go to state 4
@@ -541,7 +555,7 @@ state 17
     (11) statement -> expression .
     (12) expression -> expression . + expression
     (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
+    (14) expression -> expression . MULTIPLY expression
     (15) expression -> expression . / expression
     (16) expression -> expression . IN expression
     (17) expression -> expression . EQ expression
@@ -550,21 +564,23 @@ state 17
     (20) expression -> expression . LEQ expression
     (21) expression -> expression . SG expression
     (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
 
     ;               reduce using rule 11 (statement -> expression .)
     +               shift and go to state 32
     -               shift and go to state 34
-    *               shift and go to state 33
+    MULTIPLY        shift and go to state 38
     /               shift and go to state 35
     IN              shift and go to state 37
     EQ              shift and go to state 31
-    NEQ             shift and go to state 40
+    NEQ             shift and go to state 41
     GEQ             shift and go to state 29
     LEQ             shift and go to state 36
-    SG              shift and go to state 38
-    SL              shift and go to state 30
-    [               shift and go to state 39
+    SG              shift and go to state 39
+    SL              shift and go to state 33
+    POWER           shift and go to state 30
+    [               shift and go to state 40
 
 
 state 18
@@ -572,7 +588,7 @@ state 18
     (10) statement -> FILTERON expression .
     (12) expression -> expression . + expression
     (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
+    (14) expression -> expression . MULTIPLY expression
     (15) expression -> expression . / expression
     (16) expression -> expression . IN expression
     (17) expression -> expression . EQ expression
@@ -581,21 +597,23 @@ state 18
     (20) expression -> expression . LEQ expression
     (21) expression -> expression . SG expression
     (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
 
     ;               reduce using rule 10 (statement -> FILTERON expression .)
     +               shift and go to state 32
     -               shift and go to state 34
-    *               shift and go to state 33
+    MULTIPLY        shift and go to state 38
     /               shift and go to state 35
     IN              shift and go to state 37
     EQ              shift and go to state 31
-    NEQ             shift and go to state 40
+    NEQ             shift and go to state 41
     GEQ             shift and go to state 29
     LEQ             shift and go to state 36
-    SG              shift and go to state 38
-    SL              shift and go to state 30
-    [               shift and go to state 39
+    SG              shift and go to state 39
+    SL              shift and go to state 33
+    POWER           shift and go to state 30
+    [               shift and go to state 40
 
 
 state 19
@@ -624,7 +642,7 @@ state 20
     (4) statementblock -> WHILE ( . expression ) { statementblock }
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -633,16 +651,17 @@ state 20
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     -               shift and go to state 6
     (               shift and go to state 5
@@ -653,14 +672,14 @@ state 20
     NAME            shift and go to state 12
     TEST            shift and go to state 15
 
-    expression                     shift and go to state 41
+    expression                     shift and go to state 42
 
 state 21
 
-    (24) expression -> ( expression . )
+    (25) expression -> ( expression . )
     (12) expression -> expression . + expression
     (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
+    (14) expression -> expression . MULTIPLY expression
     (15) expression -> expression . / expression
     (16) expression -> expression . IN expression
     (17) expression -> expression . EQ expression
@@ -669,29 +688,31 @@ state 21
     (20) expression -> expression . LEQ expression
     (21) expression -> expression . SG expression
     (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
 
-    )               shift and go to state 42
+    )               shift and go to state 43
     +               shift and go to state 32
     -               shift and go to state 34
-    *               shift and go to state 33
+    MULTIPLY        shift and go to state 38
     /               shift and go to state 35
     IN              shift and go to state 37
     EQ              shift and go to state 31
-    NEQ             shift and go to state 40
+    NEQ             shift and go to state 41
     GEQ             shift and go to state 29
     LEQ             shift and go to state 36
-    SG              shift and go to state 38
-    SL              shift and go to state 30
-    [               shift and go to state 39
+    SG              shift and go to state 39
+    SL              shift and go to state 33
+    POWER           shift and go to state 30
+    [               shift and go to state 40
 
 
 state 22
 
-    (23) expression -> - expression .
+    (24) expression -> - expression .
     (12) expression -> expression . + expression
     (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
+    (14) expression -> expression . MULTIPLY expression
     (15) expression -> expression . / expression
     (16) expression -> expression . IN expression
     (17) expression -> expression . EQ expression
@@ -700,37 +721,40 @@ state 22
     (20) expression -> expression . LEQ expression
     (21) expression -> expression . SG expression
     (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
 
-    +               reduce using rule 23 (expression -> - expression .)
-    -               reduce using rule 23 (expression -> - expression .)
-    *               reduce using rule 23 (expression -> - expression .)
-    /               reduce using rule 23 (expression -> - expression .)
-    IN              reduce using rule 23 (expression -> - expression .)
-    EQ              reduce using rule 23 (expression -> - expression .)
-    NEQ             reduce using rule 23 (expression -> - expression .)
-    GEQ             reduce using rule 23 (expression -> - expression .)
-    LEQ             reduce using rule 23 (expression -> - expression .)
-    SG              reduce using rule 23 (expression -> - expression .)
-    SL              reduce using rule 23 (expression -> - expression .)
-    [               reduce using rule 23 (expression -> - expression .)
-    ;               reduce using rule 23 (expression -> - expression .)
-    )               reduce using rule 23 (expression -> - expression .)
-    ]               reduce using rule 23 (expression -> - expression .)
-    {               reduce using rule 23 (expression -> - expression .)
+    +               reduce using rule 24 (expression -> - expression .)
+    -               reduce using rule 24 (expression -> - expression .)
+    MULTIPLY        reduce using rule 24 (expression -> - expression .)
+    /               reduce using rule 24 (expression -> - expression .)
+    IN              reduce using rule 24 (expression -> - expression .)
+    EQ              reduce using rule 24 (expression -> - expression .)
+    NEQ             reduce using rule 24 (expression -> - expression .)
+    GEQ             reduce using rule 24 (expression -> - expression .)
+    LEQ             reduce using rule 24 (expression -> - expression .)
+    SG              reduce using rule 24 (expression -> - expression .)
+    SL              reduce using rule 24 (expression -> - expression .)
+    POWER           reduce using rule 24 (expression -> - expression .)
+    [               reduce using rule 24 (expression -> - expression .)
+    ;               reduce using rule 24 (expression -> - expression .)
+    )               reduce using rule 24 (expression -> - expression .)
+    ]               reduce using rule 24 (expression -> - expression .)
+    {               reduce using rule 24 (expression -> - expression .)
 
   ! +               [ shift and go to state 32 ]
   ! -               [ shift and go to state 34 ]
-  ! *               [ shift and go to state 33 ]
+  ! MULTIPLY        [ shift and go to state 38 ]
   ! /               [ shift and go to state 35 ]
   ! IN              [ shift and go to state 37 ]
   ! EQ              [ shift and go to state 31 ]
-  ! NEQ             [ shift and go to state 40 ]
+  ! NEQ             [ shift and go to state 41 ]
   ! GEQ             [ shift and go to state 29 ]
   ! LEQ             [ shift and go to state 36 ]
-  ! SG              [ shift and go to state 38 ]
-  ! SL              [ shift and go to state 30 ]
-  ! [               [ shift and go to state 39 ]
+  ! SG              [ shift and go to state 39 ]
+  ! SL              [ shift and go to state 33 ]
+  ! POWER           [ shift and go to state 30 ]
+  ! [               [ shift and go to state 40 ]
 
 
 state 23
@@ -758,7 +782,7 @@ state 24
 
     (8) statementblock -> FOR NAME . IN expression { statementblock }
 
-    IN              shift and go to state 43
+    IN              shift and go to state 44
 
 
 state 25
@@ -766,7 +790,7 @@ state 25
     (7) statementblock -> FOR ( . expression ; expression ; expression ) { statementblock }
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -775,53 +799,17 @@ state 25
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
-
-    -               shift and go to state 6
-    (               shift and go to state 5
-    BOOL            shift and go to state 14
-    NUMBER          shift and go to state 2
-    STRING          shift and go to state 8
-    OBSERVATION     shift and go to state 13
-    NAME            shift and go to state 12
-    TEST            shift and go to state 15
-
-    expression                     shift and go to state 44
-
-state 26
-
-    (5) statementblock -> IF ( . expression ) { statementblock }
-    (6) statementblock -> IF ( . expression ) { statementblock } ELSE { statementblock }
-    (12) expression -> . expression + expression
-    (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
-    (15) expression -> . expression / expression
-    (16) expression -> . expression IN expression
-    (17) expression -> . expression EQ expression
-    (18) expression -> . expression NEQ expression
-    (19) expression -> . expression GEQ expression
-    (20) expression -> . expression LEQ expression
-    (21) expression -> . expression SG expression
-    (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     -               shift and go to state 6
     (               shift and go to state 5
@@ -834,12 +822,13 @@ state 26
 
     expression                     shift and go to state 45
 
-state 27
+state 26
 
-    (30) expression -> NAME ASSIGN . expression
+    (5) statementblock -> IF ( . expression ) { statementblock }
+    (6) statementblock -> IF ( . expression ) { statementblock } ELSE { statementblock }
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -848,16 +837,17 @@ state 27
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     -               shift and go to state 6
     (               shift and go to state 5
@@ -869,6 +859,43 @@ state 27
     TEST            shift and go to state 15
 
     expression                     shift and go to state 46
+
+state 27
+
+    (31) expression -> NAME ASSIGN . expression
+    (12) expression -> . expression + expression
+    (13) expression -> . expression - expression
+    (14) expression -> . expression MULTIPLY expression
+    (15) expression -> . expression / expression
+    (16) expression -> . expression IN expression
+    (17) expression -> . expression EQ expression
+    (18) expression -> . expression NEQ expression
+    (19) expression -> . expression GEQ expression
+    (20) expression -> . expression LEQ expression
+    (21) expression -> . expression SG expression
+    (22) expression -> . expression SL expression
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
+
+    -               shift and go to state 6
+    (               shift and go to state 5
+    BOOL            shift and go to state 14
+    NUMBER          shift and go to state 2
+    STRING          shift and go to state 8
+    OBSERVATION     shift and go to state 13
+    NAME            shift and go to state 12
+    TEST            shift and go to state 15
+
+    expression                     shift and go to state 47
 
 state 28
 
@@ -885,7 +912,7 @@ state 28
     (11) statement -> . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -894,18 +921,19 @@ state 28
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
-    }               shift and go to state 47
+    }               shift and go to state 48
     {               shift and go to state 16
     WHILE           shift and go to state 4
     IF              shift and go to state 10
@@ -929,7 +957,7 @@ state 29
     (19) expression -> expression GEQ . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -938,52 +966,17 @@ state 29
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
-
-    -               shift and go to state 6
-    (               shift and go to state 5
-    BOOL            shift and go to state 14
-    NUMBER          shift and go to state 2
-    STRING          shift and go to state 8
-    OBSERVATION     shift and go to state 13
-    NAME            shift and go to state 12
-    TEST            shift and go to state 15
-
-    expression                     shift and go to state 48
-
-state 30
-
-    (22) expression -> expression SL . expression
-    (12) expression -> . expression + expression
-    (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
-    (15) expression -> . expression / expression
-    (16) expression -> . expression IN expression
-    (17) expression -> . expression EQ expression
-    (18) expression -> . expression NEQ expression
-    (19) expression -> . expression GEQ expression
-    (20) expression -> . expression LEQ expression
-    (21) expression -> . expression SG expression
-    (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     -               shift and go to state 6
     (               shift and go to state 5
@@ -996,12 +989,12 @@ state 30
 
     expression                     shift and go to state 49
 
-state 31
+state 30
 
-    (17) expression -> expression EQ . expression
+    (23) expression -> expression POWER . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -1010,16 +1003,17 @@ state 31
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     -               shift and go to state 6
     (               shift and go to state 5
@@ -1032,12 +1026,12 @@ state 31
 
     expression                     shift and go to state 50
 
-state 32
+state 31
 
-    (12) expression -> expression + . expression
+    (17) expression -> expression EQ . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -1046,16 +1040,17 @@ state 32
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     -               shift and go to state 6
     (               shift and go to state 5
@@ -1068,12 +1063,12 @@ state 32
 
     expression                     shift and go to state 51
 
-state 33
+state 32
 
-    (14) expression -> expression * . expression
+    (12) expression -> expression + . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -1082,16 +1077,17 @@ state 33
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     -               shift and go to state 6
     (               shift and go to state 5
@@ -1104,12 +1100,12 @@ state 33
 
     expression                     shift and go to state 52
 
-state 34
+state 33
 
-    (13) expression -> expression - . expression
+    (22) expression -> expression SL . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -1118,16 +1114,17 @@ state 34
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     -               shift and go to state 6
     (               shift and go to state 5
@@ -1140,12 +1137,12 @@ state 34
 
     expression                     shift and go to state 53
 
-state 35
+state 34
 
-    (15) expression -> expression / . expression
+    (13) expression -> expression - . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -1154,16 +1151,17 @@ state 35
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     -               shift and go to state 6
     (               shift and go to state 5
@@ -1176,12 +1174,12 @@ state 35
 
     expression                     shift and go to state 54
 
-state 36
+state 35
 
-    (20) expression -> expression LEQ . expression
+    (15) expression -> expression / . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -1190,16 +1188,17 @@ state 36
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     -               shift and go to state 6
     (               shift and go to state 5
@@ -1212,12 +1211,12 @@ state 36
 
     expression                     shift and go to state 55
 
-state 37
+state 36
 
-    (16) expression -> expression IN . expression
+    (20) expression -> expression LEQ . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -1226,16 +1225,17 @@ state 37
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     -               shift and go to state 6
     (               shift and go to state 5
@@ -1248,12 +1248,12 @@ state 37
 
     expression                     shift and go to state 56
 
-state 38
+state 37
 
-    (21) expression -> expression SG . expression
+    (16) expression -> expression IN . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -1262,16 +1262,17 @@ state 38
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     -               shift and go to state 6
     (               shift and go to state 5
@@ -1284,12 +1285,12 @@ state 38
 
     expression                     shift and go to state 57
 
-state 39
+state 38
 
-    (25) expression -> expression [ . expression ]
+    (14) expression -> expression MULTIPLY . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -1298,16 +1299,17 @@ state 39
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     -               shift and go to state 6
     (               shift and go to state 5
@@ -1320,12 +1322,12 @@ state 39
 
     expression                     shift and go to state 58
 
-state 40
+state 39
 
-    (18) expression -> expression NEQ . expression
+    (21) expression -> expression SG . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -1334,16 +1336,17 @@ state 40
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     -               shift and go to state 6
     (               shift and go to state 5
@@ -1356,65 +1359,12 @@ state 40
 
     expression                     shift and go to state 59
 
-state 41
+state 40
 
-    (4) statementblock -> WHILE ( expression . ) { statementblock }
-    (12) expression -> expression . + expression
-    (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
-    (15) expression -> expression . / expression
-    (16) expression -> expression . IN expression
-    (17) expression -> expression . EQ expression
-    (18) expression -> expression . NEQ expression
-    (19) expression -> expression . GEQ expression
-    (20) expression -> expression . LEQ expression
-    (21) expression -> expression . SG expression
-    (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
-
-    )               shift and go to state 60
-    +               shift and go to state 32
-    -               shift and go to state 34
-    *               shift and go to state 33
-    /               shift and go to state 35
-    IN              shift and go to state 37
-    EQ              shift and go to state 31
-    NEQ             shift and go to state 40
-    GEQ             shift and go to state 29
-    LEQ             shift and go to state 36
-    SG              shift and go to state 38
-    SL              shift and go to state 30
-    [               shift and go to state 39
-
-
-state 42
-
-    (24) expression -> ( expression ) .
-
-    +               reduce using rule 24 (expression -> ( expression ) .)
-    -               reduce using rule 24 (expression -> ( expression ) .)
-    *               reduce using rule 24 (expression -> ( expression ) .)
-    /               reduce using rule 24 (expression -> ( expression ) .)
-    IN              reduce using rule 24 (expression -> ( expression ) .)
-    EQ              reduce using rule 24 (expression -> ( expression ) .)
-    NEQ             reduce using rule 24 (expression -> ( expression ) .)
-    GEQ             reduce using rule 24 (expression -> ( expression ) .)
-    LEQ             reduce using rule 24 (expression -> ( expression ) .)
-    SG              reduce using rule 24 (expression -> ( expression ) .)
-    SL              reduce using rule 24 (expression -> ( expression ) .)
-    [               reduce using rule 24 (expression -> ( expression ) .)
-    ;               reduce using rule 24 (expression -> ( expression ) .)
-    )               reduce using rule 24 (expression -> ( expression ) .)
-    ]               reduce using rule 24 (expression -> ( expression ) .)
-    {               reduce using rule 24 (expression -> ( expression ) .)
-
-
-state 43
-
-    (8) statementblock -> FOR NAME IN . expression { statementblock }
+    (26) expression -> expression [ . expression ]
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -1423,16 +1373,54 @@ state 43
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
+
+    -               shift and go to state 6
+    (               shift and go to state 5
+    BOOL            shift and go to state 14
+    NUMBER          shift and go to state 2
+    STRING          shift and go to state 8
+    OBSERVATION     shift and go to state 13
+    NAME            shift and go to state 12
+    TEST            shift and go to state 15
+
+    expression                     shift and go to state 60
+
+state 41
+
+    (18) expression -> expression NEQ . expression
+    (12) expression -> . expression + expression
+    (13) expression -> . expression - expression
+    (14) expression -> . expression MULTIPLY expression
+    (15) expression -> . expression / expression
+    (16) expression -> . expression IN expression
+    (17) expression -> . expression EQ expression
+    (18) expression -> . expression NEQ expression
+    (19) expression -> . expression GEQ expression
+    (20) expression -> . expression LEQ expression
+    (21) expression -> . expression SG expression
+    (22) expression -> . expression SL expression
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     -               shift and go to state 6
     (               shift and go to state 5
@@ -1445,12 +1433,12 @@ state 43
 
     expression                     shift and go to state 61
 
-state 44
+state 42
 
-    (7) statementblock -> FOR ( expression . ; expression ; expression ) { statementblock }
+    (4) statementblock -> WHILE ( expression . ) { statementblock }
     (12) expression -> expression . + expression
     (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
+    (14) expression -> expression . MULTIPLY expression
     (15) expression -> expression . / expression
     (16) expression -> expression . IN expression
     (17) expression -> expression . EQ expression
@@ -1459,30 +1447,125 @@ state 44
     (20) expression -> expression . LEQ expression
     (21) expression -> expression . SG expression
     (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
 
-    ;               shift and go to state 62
+    )               shift and go to state 62
     +               shift and go to state 32
     -               shift and go to state 34
-    *               shift and go to state 33
+    MULTIPLY        shift and go to state 38
     /               shift and go to state 35
     IN              shift and go to state 37
     EQ              shift and go to state 31
-    NEQ             shift and go to state 40
+    NEQ             shift and go to state 41
     GEQ             shift and go to state 29
     LEQ             shift and go to state 36
-    SG              shift and go to state 38
-    SL              shift and go to state 30
-    [               shift and go to state 39
+    SG              shift and go to state 39
+    SL              shift and go to state 33
+    POWER           shift and go to state 30
+    [               shift and go to state 40
 
+
+state 43
+
+    (25) expression -> ( expression ) .
+
+    +               reduce using rule 25 (expression -> ( expression ) .)
+    -               reduce using rule 25 (expression -> ( expression ) .)
+    MULTIPLY        reduce using rule 25 (expression -> ( expression ) .)
+    /               reduce using rule 25 (expression -> ( expression ) .)
+    IN              reduce using rule 25 (expression -> ( expression ) .)
+    EQ              reduce using rule 25 (expression -> ( expression ) .)
+    NEQ             reduce using rule 25 (expression -> ( expression ) .)
+    GEQ             reduce using rule 25 (expression -> ( expression ) .)
+    LEQ             reduce using rule 25 (expression -> ( expression ) .)
+    SG              reduce using rule 25 (expression -> ( expression ) .)
+    SL              reduce using rule 25 (expression -> ( expression ) .)
+    POWER           reduce using rule 25 (expression -> ( expression ) .)
+    [               reduce using rule 25 (expression -> ( expression ) .)
+    ;               reduce using rule 25 (expression -> ( expression ) .)
+    )               reduce using rule 25 (expression -> ( expression ) .)
+    ]               reduce using rule 25 (expression -> ( expression ) .)
+    {               reduce using rule 25 (expression -> ( expression ) .)
+
+
+state 44
+
+    (8) statementblock -> FOR NAME IN . expression { statementblock }
+    (12) expression -> . expression + expression
+    (13) expression -> . expression - expression
+    (14) expression -> . expression MULTIPLY expression
+    (15) expression -> . expression / expression
+    (16) expression -> . expression IN expression
+    (17) expression -> . expression EQ expression
+    (18) expression -> . expression NEQ expression
+    (19) expression -> . expression GEQ expression
+    (20) expression -> . expression LEQ expression
+    (21) expression -> . expression SG expression
+    (22) expression -> . expression SL expression
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
+
+    -               shift and go to state 6
+    (               shift and go to state 5
+    BOOL            shift and go to state 14
+    NUMBER          shift and go to state 2
+    STRING          shift and go to state 8
+    OBSERVATION     shift and go to state 13
+    NAME            shift and go to state 12
+    TEST            shift and go to state 15
+
+    expression                     shift and go to state 63
 
 state 45
+
+    (7) statementblock -> FOR ( expression . ; expression ; expression ) { statementblock }
+    (12) expression -> expression . + expression
+    (13) expression -> expression . - expression
+    (14) expression -> expression . MULTIPLY expression
+    (15) expression -> expression . / expression
+    (16) expression -> expression . IN expression
+    (17) expression -> expression . EQ expression
+    (18) expression -> expression . NEQ expression
+    (19) expression -> expression . GEQ expression
+    (20) expression -> expression . LEQ expression
+    (21) expression -> expression . SG expression
+    (22) expression -> expression . SL expression
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
+
+    ;               shift and go to state 64
+    +               shift and go to state 32
+    -               shift and go to state 34
+    MULTIPLY        shift and go to state 38
+    /               shift and go to state 35
+    IN              shift and go to state 37
+    EQ              shift and go to state 31
+    NEQ             shift and go to state 41
+    GEQ             shift and go to state 29
+    LEQ             shift and go to state 36
+    SG              shift and go to state 39
+    SL              shift and go to state 33
+    POWER           shift and go to state 30
+    [               shift and go to state 40
+
+
+state 46
 
     (5) statementblock -> IF ( expression . ) { statementblock }
     (6) statementblock -> IF ( expression . ) { statementblock } ELSE { statementblock }
     (12) expression -> expression . + expression
     (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
+    (14) expression -> expression . MULTIPLY expression
     (15) expression -> expression . / expression
     (16) expression -> expression . IN expression
     (17) expression -> expression . EQ expression
@@ -1491,29 +1574,31 @@ state 45
     (20) expression -> expression . LEQ expression
     (21) expression -> expression . SG expression
     (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
 
-    )               shift and go to state 63
+    )               shift and go to state 65
     +               shift and go to state 32
     -               shift and go to state 34
-    *               shift and go to state 33
+    MULTIPLY        shift and go to state 38
     /               shift and go to state 35
     IN              shift and go to state 37
     EQ              shift and go to state 31
-    NEQ             shift and go to state 40
+    NEQ             shift and go to state 41
     GEQ             shift and go to state 29
     LEQ             shift and go to state 36
-    SG              shift and go to state 38
-    SL              shift and go to state 30
-    [               shift and go to state 39
+    SG              shift and go to state 39
+    SL              shift and go to state 33
+    POWER           shift and go to state 30
+    [               shift and go to state 40
 
 
-state 46
+state 47
 
-    (30) expression -> NAME ASSIGN expression .
+    (31) expression -> NAME ASSIGN expression .
     (12) expression -> expression . + expression
     (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
+    (14) expression -> expression . MULTIPLY expression
     (15) expression -> expression . / expression
     (16) expression -> expression . IN expression
     (17) expression -> expression . EQ expression
@@ -1522,11 +1607,12 @@ state 46
     (20) expression -> expression . LEQ expression
     (21) expression -> expression . SG expression
     (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
 
   ! shift/reduce conflict for + resolved as shift
   ! shift/reduce conflict for - resolved as shift
-  ! shift/reduce conflict for * resolved as shift
+  ! shift/reduce conflict for MULTIPLY resolved as shift
   ! shift/reduce conflict for / resolved as shift
   ! shift/reduce conflict for IN resolved as shift
   ! shift/reduce conflict for EQ resolved as shift
@@ -1535,39 +1621,42 @@ state 46
   ! shift/reduce conflict for LEQ resolved as shift
   ! shift/reduce conflict for SG resolved as shift
   ! shift/reduce conflict for SL resolved as shift
+  ! shift/reduce conflict for POWER resolved as shift
   ! shift/reduce conflict for [ resolved as shift
-    ;               reduce using rule 30 (expression -> NAME ASSIGN expression .)
-    )               reduce using rule 30 (expression -> NAME ASSIGN expression .)
-    ]               reduce using rule 30 (expression -> NAME ASSIGN expression .)
-    {               reduce using rule 30 (expression -> NAME ASSIGN expression .)
+    ;               reduce using rule 31 (expression -> NAME ASSIGN expression .)
+    )               reduce using rule 31 (expression -> NAME ASSIGN expression .)
+    ]               reduce using rule 31 (expression -> NAME ASSIGN expression .)
+    {               reduce using rule 31 (expression -> NAME ASSIGN expression .)
     +               shift and go to state 32
     -               shift and go to state 34
-    *               shift and go to state 33
+    MULTIPLY        shift and go to state 38
     /               shift and go to state 35
     IN              shift and go to state 37
     EQ              shift and go to state 31
-    NEQ             shift and go to state 40
+    NEQ             shift and go to state 41
     GEQ             shift and go to state 29
     LEQ             shift and go to state 36
-    SG              shift and go to state 38
-    SL              shift and go to state 30
-    [               shift and go to state 39
+    SG              shift and go to state 39
+    SL              shift and go to state 33
+    POWER           shift and go to state 30
+    [               shift and go to state 40
 
-  ! +               [ reduce using rule 30 (expression -> NAME ASSIGN expression .) ]
-  ! -               [ reduce using rule 30 (expression -> NAME ASSIGN expression .) ]
-  ! *               [ reduce using rule 30 (expression -> NAME ASSIGN expression .) ]
-  ! /               [ reduce using rule 30 (expression -> NAME ASSIGN expression .) ]
-  ! IN              [ reduce using rule 30 (expression -> NAME ASSIGN expression .) ]
-  ! EQ              [ reduce using rule 30 (expression -> NAME ASSIGN expression .) ]
-  ! NEQ             [ reduce using rule 30 (expression -> NAME ASSIGN expression .) ]
-  ! GEQ             [ reduce using rule 30 (expression -> NAME ASSIGN expression .) ]
-  ! LEQ             [ reduce using rule 30 (expression -> NAME ASSIGN expression .) ]
-  ! SG              [ reduce using rule 30 (expression -> NAME ASSIGN expression .) ]
-  ! SL              [ reduce using rule 30 (expression -> NAME ASSIGN expression .) ]
-  ! [               [ reduce using rule 30 (expression -> NAME ASSIGN expression .) ]
+  ! +               [ reduce using rule 31 (expression -> NAME ASSIGN expression .) ]
+  ! -               [ reduce using rule 31 (expression -> NAME ASSIGN expression .) ]
+  ! MULTIPLY        [ reduce using rule 31 (expression -> NAME ASSIGN expression .) ]
+  ! /               [ reduce using rule 31 (expression -> NAME ASSIGN expression .) ]
+  ! IN              [ reduce using rule 31 (expression -> NAME ASSIGN expression .) ]
+  ! EQ              [ reduce using rule 31 (expression -> NAME ASSIGN expression .) ]
+  ! NEQ             [ reduce using rule 31 (expression -> NAME ASSIGN expression .) ]
+  ! GEQ             [ reduce using rule 31 (expression -> NAME ASSIGN expression .) ]
+  ! LEQ             [ reduce using rule 31 (expression -> NAME ASSIGN expression .) ]
+  ! SG              [ reduce using rule 31 (expression -> NAME ASSIGN expression .) ]
+  ! SL              [ reduce using rule 31 (expression -> NAME ASSIGN expression .) ]
+  ! POWER           [ reduce using rule 31 (expression -> NAME ASSIGN expression .) ]
+  ! [               [ reduce using rule 31 (expression -> NAME ASSIGN expression .) ]
 
 
-state 47
+state 48
 
     (3) statementblock -> { statementlist } .
 
@@ -1588,12 +1677,12 @@ state 47
     $end            reduce using rule 3 (statementblock -> { statementlist } .)
 
 
-state 48
+state 49
 
     (19) expression -> expression GEQ expression .
     (12) expression -> expression . + expression
     (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
+    (14) expression -> expression . MULTIPLY expression
     (15) expression -> expression . / expression
     (16) expression -> expression . IN expression
     (17) expression -> expression . EQ expression
@@ -1602,11 +1691,12 @@ state 48
     (20) expression -> expression . LEQ expression
     (21) expression -> expression . SG expression
     (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
 
   ! shift/reduce conflict for + resolved as shift
   ! shift/reduce conflict for - resolved as shift
-  ! shift/reduce conflict for * resolved as shift
+  ! shift/reduce conflict for MULTIPLY resolved as shift
   ! shift/reduce conflict for / resolved as shift
   ! shift/reduce conflict for IN resolved as shift
   ! shift/reduce conflict for EQ resolved as shift
@@ -1615,6 +1705,7 @@ state 48
   ! shift/reduce conflict for LEQ resolved as shift
   ! shift/reduce conflict for SG resolved as shift
   ! shift/reduce conflict for SL resolved as shift
+  ! shift/reduce conflict for POWER resolved as shift
   ! shift/reduce conflict for [ resolved as shift
     ;               reduce using rule 19 (expression -> expression GEQ expression .)
     )               reduce using rule 19 (expression -> expression GEQ expression .)
@@ -1622,20 +1713,21 @@ state 48
     {               reduce using rule 19 (expression -> expression GEQ expression .)
     +               shift and go to state 32
     -               shift and go to state 34
-    *               shift and go to state 33
+    MULTIPLY        shift and go to state 38
     /               shift and go to state 35
     IN              shift and go to state 37
     EQ              shift and go to state 31
-    NEQ             shift and go to state 40
+    NEQ             shift and go to state 41
     GEQ             shift and go to state 29
     LEQ             shift and go to state 36
-    SG              shift and go to state 38
-    SL              shift and go to state 30
-    [               shift and go to state 39
+    SG              shift and go to state 39
+    SL              shift and go to state 33
+    POWER           shift and go to state 30
+    [               shift and go to state 40
 
   ! +               [ reduce using rule 19 (expression -> expression GEQ expression .) ]
   ! -               [ reduce using rule 19 (expression -> expression GEQ expression .) ]
-  ! *               [ reduce using rule 19 (expression -> expression GEQ expression .) ]
+  ! MULTIPLY        [ reduce using rule 19 (expression -> expression GEQ expression .) ]
   ! /               [ reduce using rule 19 (expression -> expression GEQ expression .) ]
   ! IN              [ reduce using rule 19 (expression -> expression GEQ expression .) ]
   ! EQ              [ reduce using rule 19 (expression -> expression GEQ expression .) ]
@@ -1644,74 +1736,16 @@ state 48
   ! LEQ             [ reduce using rule 19 (expression -> expression GEQ expression .) ]
   ! SG              [ reduce using rule 19 (expression -> expression GEQ expression .) ]
   ! SL              [ reduce using rule 19 (expression -> expression GEQ expression .) ]
+  ! POWER           [ reduce using rule 19 (expression -> expression GEQ expression .) ]
   ! [               [ reduce using rule 19 (expression -> expression GEQ expression .) ]
-
-
-state 49
-
-    (22) expression -> expression SL expression .
-    (12) expression -> expression . + expression
-    (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
-    (15) expression -> expression . / expression
-    (16) expression -> expression . IN expression
-    (17) expression -> expression . EQ expression
-    (18) expression -> expression . NEQ expression
-    (19) expression -> expression . GEQ expression
-    (20) expression -> expression . LEQ expression
-    (21) expression -> expression . SG expression
-    (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
-
-  ! shift/reduce conflict for + resolved as shift
-  ! shift/reduce conflict for - resolved as shift
-  ! shift/reduce conflict for * resolved as shift
-  ! shift/reduce conflict for / resolved as shift
-  ! shift/reduce conflict for IN resolved as shift
-  ! shift/reduce conflict for EQ resolved as shift
-  ! shift/reduce conflict for NEQ resolved as shift
-  ! shift/reduce conflict for GEQ resolved as shift
-  ! shift/reduce conflict for LEQ resolved as shift
-  ! shift/reduce conflict for SG resolved as shift
-  ! shift/reduce conflict for SL resolved as shift
-  ! shift/reduce conflict for [ resolved as shift
-    ;               reduce using rule 22 (expression -> expression SL expression .)
-    )               reduce using rule 22 (expression -> expression SL expression .)
-    ]               reduce using rule 22 (expression -> expression SL expression .)
-    {               reduce using rule 22 (expression -> expression SL expression .)
-    +               shift and go to state 32
-    -               shift and go to state 34
-    *               shift and go to state 33
-    /               shift and go to state 35
-    IN              shift and go to state 37
-    EQ              shift and go to state 31
-    NEQ             shift and go to state 40
-    GEQ             shift and go to state 29
-    LEQ             shift and go to state 36
-    SG              shift and go to state 38
-    SL              shift and go to state 30
-    [               shift and go to state 39
-
-  ! +               [ reduce using rule 22 (expression -> expression SL expression .) ]
-  ! -               [ reduce using rule 22 (expression -> expression SL expression .) ]
-  ! *               [ reduce using rule 22 (expression -> expression SL expression .) ]
-  ! /               [ reduce using rule 22 (expression -> expression SL expression .) ]
-  ! IN              [ reduce using rule 22 (expression -> expression SL expression .) ]
-  ! EQ              [ reduce using rule 22 (expression -> expression SL expression .) ]
-  ! NEQ             [ reduce using rule 22 (expression -> expression SL expression .) ]
-  ! GEQ             [ reduce using rule 22 (expression -> expression SL expression .) ]
-  ! LEQ             [ reduce using rule 22 (expression -> expression SL expression .) ]
-  ! SG              [ reduce using rule 22 (expression -> expression SL expression .) ]
-  ! SL              [ reduce using rule 22 (expression -> expression SL expression .) ]
-  ! [               [ reduce using rule 22 (expression -> expression SL expression .) ]
 
 
 state 50
 
-    (17) expression -> expression EQ expression .
+    (23) expression -> expression POWER expression .
     (12) expression -> expression . + expression
     (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
+    (14) expression -> expression . MULTIPLY expression
     (15) expression -> expression . / expression
     (16) expression -> expression . IN expression
     (17) expression -> expression . EQ expression
@@ -1720,11 +1754,12 @@ state 50
     (20) expression -> expression . LEQ expression
     (21) expression -> expression . SG expression
     (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
 
   ! shift/reduce conflict for + resolved as shift
   ! shift/reduce conflict for - resolved as shift
-  ! shift/reduce conflict for * resolved as shift
+  ! shift/reduce conflict for MULTIPLY resolved as shift
   ! shift/reduce conflict for / resolved as shift
   ! shift/reduce conflict for IN resolved as shift
   ! shift/reduce conflict for EQ resolved as shift
@@ -1733,6 +1768,70 @@ state 50
   ! shift/reduce conflict for LEQ resolved as shift
   ! shift/reduce conflict for SG resolved as shift
   ! shift/reduce conflict for SL resolved as shift
+  ! shift/reduce conflict for POWER resolved as shift
+  ! shift/reduce conflict for [ resolved as shift
+    ;               reduce using rule 23 (expression -> expression POWER expression .)
+    )               reduce using rule 23 (expression -> expression POWER expression .)
+    ]               reduce using rule 23 (expression -> expression POWER expression .)
+    {               reduce using rule 23 (expression -> expression POWER expression .)
+    +               shift and go to state 32
+    -               shift and go to state 34
+    MULTIPLY        shift and go to state 38
+    /               shift and go to state 35
+    IN              shift and go to state 37
+    EQ              shift and go to state 31
+    NEQ             shift and go to state 41
+    GEQ             shift and go to state 29
+    LEQ             shift and go to state 36
+    SG              shift and go to state 39
+    SL              shift and go to state 33
+    POWER           shift and go to state 30
+    [               shift and go to state 40
+
+  ! +               [ reduce using rule 23 (expression -> expression POWER expression .) ]
+  ! -               [ reduce using rule 23 (expression -> expression POWER expression .) ]
+  ! MULTIPLY        [ reduce using rule 23 (expression -> expression POWER expression .) ]
+  ! /               [ reduce using rule 23 (expression -> expression POWER expression .) ]
+  ! IN              [ reduce using rule 23 (expression -> expression POWER expression .) ]
+  ! EQ              [ reduce using rule 23 (expression -> expression POWER expression .) ]
+  ! NEQ             [ reduce using rule 23 (expression -> expression POWER expression .) ]
+  ! GEQ             [ reduce using rule 23 (expression -> expression POWER expression .) ]
+  ! LEQ             [ reduce using rule 23 (expression -> expression POWER expression .) ]
+  ! SG              [ reduce using rule 23 (expression -> expression POWER expression .) ]
+  ! SL              [ reduce using rule 23 (expression -> expression POWER expression .) ]
+  ! POWER           [ reduce using rule 23 (expression -> expression POWER expression .) ]
+  ! [               [ reduce using rule 23 (expression -> expression POWER expression .) ]
+
+
+state 51
+
+    (17) expression -> expression EQ expression .
+    (12) expression -> expression . + expression
+    (13) expression -> expression . - expression
+    (14) expression -> expression . MULTIPLY expression
+    (15) expression -> expression . / expression
+    (16) expression -> expression . IN expression
+    (17) expression -> expression . EQ expression
+    (18) expression -> expression . NEQ expression
+    (19) expression -> expression . GEQ expression
+    (20) expression -> expression . LEQ expression
+    (21) expression -> expression . SG expression
+    (22) expression -> expression . SL expression
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
+
+  ! shift/reduce conflict for + resolved as shift
+  ! shift/reduce conflict for - resolved as shift
+  ! shift/reduce conflict for MULTIPLY resolved as shift
+  ! shift/reduce conflict for / resolved as shift
+  ! shift/reduce conflict for IN resolved as shift
+  ! shift/reduce conflict for EQ resolved as shift
+  ! shift/reduce conflict for NEQ resolved as shift
+  ! shift/reduce conflict for GEQ resolved as shift
+  ! shift/reduce conflict for LEQ resolved as shift
+  ! shift/reduce conflict for SG resolved as shift
+  ! shift/reduce conflict for SL resolved as shift
+  ! shift/reduce conflict for POWER resolved as shift
   ! shift/reduce conflict for [ resolved as shift
     ;               reduce using rule 17 (expression -> expression EQ expression .)
     )               reduce using rule 17 (expression -> expression EQ expression .)
@@ -1740,20 +1839,21 @@ state 50
     {               reduce using rule 17 (expression -> expression EQ expression .)
     +               shift and go to state 32
     -               shift and go to state 34
-    *               shift and go to state 33
+    MULTIPLY        shift and go to state 38
     /               shift and go to state 35
     IN              shift and go to state 37
     EQ              shift and go to state 31
-    NEQ             shift and go to state 40
+    NEQ             shift and go to state 41
     GEQ             shift and go to state 29
     LEQ             shift and go to state 36
-    SG              shift and go to state 38
-    SL              shift and go to state 30
-    [               shift and go to state 39
+    SG              shift and go to state 39
+    SL              shift and go to state 33
+    POWER           shift and go to state 30
+    [               shift and go to state 40
 
   ! +               [ reduce using rule 17 (expression -> expression EQ expression .) ]
   ! -               [ reduce using rule 17 (expression -> expression EQ expression .) ]
-  ! *               [ reduce using rule 17 (expression -> expression EQ expression .) ]
+  ! MULTIPLY        [ reduce using rule 17 (expression -> expression EQ expression .) ]
   ! /               [ reduce using rule 17 (expression -> expression EQ expression .) ]
   ! IN              [ reduce using rule 17 (expression -> expression EQ expression .) ]
   ! EQ              [ reduce using rule 17 (expression -> expression EQ expression .) ]
@@ -1762,15 +1862,16 @@ state 50
   ! LEQ             [ reduce using rule 17 (expression -> expression EQ expression .) ]
   ! SG              [ reduce using rule 17 (expression -> expression EQ expression .) ]
   ! SL              [ reduce using rule 17 (expression -> expression EQ expression .) ]
+  ! POWER           [ reduce using rule 17 (expression -> expression EQ expression .) ]
   ! [               [ reduce using rule 17 (expression -> expression EQ expression .) ]
 
 
-state 51
+state 52
 
     (12) expression -> expression + expression .
     (12) expression -> expression . + expression
     (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
+    (14) expression -> expression . MULTIPLY expression
     (15) expression -> expression . / expression
     (16) expression -> expression . IN expression
     (17) expression -> expression . EQ expression
@@ -1779,7 +1880,8 @@ state 51
     (20) expression -> expression . LEQ expression
     (21) expression -> expression . SG expression
     (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
 
     +               reduce using rule 12 (expression -> expression + expression .)
     -               reduce using rule 12 (expression -> expression + expression .)
@@ -1790,81 +1892,36 @@ state 51
     LEQ             reduce using rule 12 (expression -> expression + expression .)
     SG              reduce using rule 12 (expression -> expression + expression .)
     SL              reduce using rule 12 (expression -> expression + expression .)
+    POWER           reduce using rule 12 (expression -> expression + expression .)
     [               reduce using rule 12 (expression -> expression + expression .)
     ;               reduce using rule 12 (expression -> expression + expression .)
     )               reduce using rule 12 (expression -> expression + expression .)
     ]               reduce using rule 12 (expression -> expression + expression .)
     {               reduce using rule 12 (expression -> expression + expression .)
-    *               shift and go to state 33
+    MULTIPLY        shift and go to state 38
     /               shift and go to state 35
 
-  ! *               [ reduce using rule 12 (expression -> expression + expression .) ]
+  ! MULTIPLY        [ reduce using rule 12 (expression -> expression + expression .) ]
   ! /               [ reduce using rule 12 (expression -> expression + expression .) ]
   ! +               [ shift and go to state 32 ]
   ! -               [ shift and go to state 34 ]
   ! IN              [ shift and go to state 37 ]
   ! EQ              [ shift and go to state 31 ]
-  ! NEQ             [ shift and go to state 40 ]
+  ! NEQ             [ shift and go to state 41 ]
   ! GEQ             [ shift and go to state 29 ]
   ! LEQ             [ shift and go to state 36 ]
-  ! SG              [ shift and go to state 38 ]
-  ! SL              [ shift and go to state 30 ]
-  ! [               [ shift and go to state 39 ]
-
-
-state 52
-
-    (14) expression -> expression * expression .
-    (12) expression -> expression . + expression
-    (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
-    (15) expression -> expression . / expression
-    (16) expression -> expression . IN expression
-    (17) expression -> expression . EQ expression
-    (18) expression -> expression . NEQ expression
-    (19) expression -> expression . GEQ expression
-    (20) expression -> expression . LEQ expression
-    (21) expression -> expression . SG expression
-    (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
-
-    +               reduce using rule 14 (expression -> expression * expression .)
-    -               reduce using rule 14 (expression -> expression * expression .)
-    *               reduce using rule 14 (expression -> expression * expression .)
-    /               reduce using rule 14 (expression -> expression * expression .)
-    IN              reduce using rule 14 (expression -> expression * expression .)
-    EQ              reduce using rule 14 (expression -> expression * expression .)
-    NEQ             reduce using rule 14 (expression -> expression * expression .)
-    GEQ             reduce using rule 14 (expression -> expression * expression .)
-    LEQ             reduce using rule 14 (expression -> expression * expression .)
-    SG              reduce using rule 14 (expression -> expression * expression .)
-    SL              reduce using rule 14 (expression -> expression * expression .)
-    [               reduce using rule 14 (expression -> expression * expression .)
-    ;               reduce using rule 14 (expression -> expression * expression .)
-    )               reduce using rule 14 (expression -> expression * expression .)
-    ]               reduce using rule 14 (expression -> expression * expression .)
-    {               reduce using rule 14 (expression -> expression * expression .)
-
-  ! +               [ shift and go to state 32 ]
-  ! -               [ shift and go to state 34 ]
-  ! *               [ shift and go to state 33 ]
-  ! /               [ shift and go to state 35 ]
-  ! IN              [ shift and go to state 37 ]
-  ! EQ              [ shift and go to state 31 ]
-  ! NEQ             [ shift and go to state 40 ]
-  ! GEQ             [ shift and go to state 29 ]
-  ! LEQ             [ shift and go to state 36 ]
-  ! SG              [ shift and go to state 38 ]
-  ! SL              [ shift and go to state 30 ]
-  ! [               [ shift and go to state 39 ]
+  ! SG              [ shift and go to state 39 ]
+  ! SL              [ shift and go to state 33 ]
+  ! POWER           [ shift and go to state 30 ]
+  ! [               [ shift and go to state 40 ]
 
 
 state 53
 
-    (13) expression -> expression - expression .
+    (22) expression -> expression SL expression .
     (12) expression -> expression . + expression
     (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
+    (14) expression -> expression . MULTIPLY expression
     (15) expression -> expression . / expression
     (16) expression -> expression . IN expression
     (17) expression -> expression . EQ expression
@@ -1873,7 +1930,71 @@ state 53
     (20) expression -> expression . LEQ expression
     (21) expression -> expression . SG expression
     (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
+
+  ! shift/reduce conflict for + resolved as shift
+  ! shift/reduce conflict for - resolved as shift
+  ! shift/reduce conflict for MULTIPLY resolved as shift
+  ! shift/reduce conflict for / resolved as shift
+  ! shift/reduce conflict for IN resolved as shift
+  ! shift/reduce conflict for EQ resolved as shift
+  ! shift/reduce conflict for NEQ resolved as shift
+  ! shift/reduce conflict for GEQ resolved as shift
+  ! shift/reduce conflict for LEQ resolved as shift
+  ! shift/reduce conflict for SG resolved as shift
+  ! shift/reduce conflict for SL resolved as shift
+  ! shift/reduce conflict for POWER resolved as shift
+  ! shift/reduce conflict for [ resolved as shift
+    ;               reduce using rule 22 (expression -> expression SL expression .)
+    )               reduce using rule 22 (expression -> expression SL expression .)
+    ]               reduce using rule 22 (expression -> expression SL expression .)
+    {               reduce using rule 22 (expression -> expression SL expression .)
+    +               shift and go to state 32
+    -               shift and go to state 34
+    MULTIPLY        shift and go to state 38
+    /               shift and go to state 35
+    IN              shift and go to state 37
+    EQ              shift and go to state 31
+    NEQ             shift and go to state 41
+    GEQ             shift and go to state 29
+    LEQ             shift and go to state 36
+    SG              shift and go to state 39
+    SL              shift and go to state 33
+    POWER           shift and go to state 30
+    [               shift and go to state 40
+
+  ! +               [ reduce using rule 22 (expression -> expression SL expression .) ]
+  ! -               [ reduce using rule 22 (expression -> expression SL expression .) ]
+  ! MULTIPLY        [ reduce using rule 22 (expression -> expression SL expression .) ]
+  ! /               [ reduce using rule 22 (expression -> expression SL expression .) ]
+  ! IN              [ reduce using rule 22 (expression -> expression SL expression .) ]
+  ! EQ              [ reduce using rule 22 (expression -> expression SL expression .) ]
+  ! NEQ             [ reduce using rule 22 (expression -> expression SL expression .) ]
+  ! GEQ             [ reduce using rule 22 (expression -> expression SL expression .) ]
+  ! LEQ             [ reduce using rule 22 (expression -> expression SL expression .) ]
+  ! SG              [ reduce using rule 22 (expression -> expression SL expression .) ]
+  ! SL              [ reduce using rule 22 (expression -> expression SL expression .) ]
+  ! POWER           [ reduce using rule 22 (expression -> expression SL expression .) ]
+  ! [               [ reduce using rule 22 (expression -> expression SL expression .) ]
+
+
+state 54
+
+    (13) expression -> expression - expression .
+    (12) expression -> expression . + expression
+    (13) expression -> expression . - expression
+    (14) expression -> expression . MULTIPLY expression
+    (15) expression -> expression . / expression
+    (16) expression -> expression . IN expression
+    (17) expression -> expression . EQ expression
+    (18) expression -> expression . NEQ expression
+    (19) expression -> expression . GEQ expression
+    (20) expression -> expression . LEQ expression
+    (21) expression -> expression . SG expression
+    (22) expression -> expression . SL expression
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
 
     +               reduce using rule 13 (expression -> expression - expression .)
     -               reduce using rule 13 (expression -> expression - expression .)
@@ -1884,34 +2005,36 @@ state 53
     LEQ             reduce using rule 13 (expression -> expression - expression .)
     SG              reduce using rule 13 (expression -> expression - expression .)
     SL              reduce using rule 13 (expression -> expression - expression .)
+    POWER           reduce using rule 13 (expression -> expression - expression .)
     [               reduce using rule 13 (expression -> expression - expression .)
     ;               reduce using rule 13 (expression -> expression - expression .)
     )               reduce using rule 13 (expression -> expression - expression .)
     ]               reduce using rule 13 (expression -> expression - expression .)
     {               reduce using rule 13 (expression -> expression - expression .)
-    *               shift and go to state 33
+    MULTIPLY        shift and go to state 38
     /               shift and go to state 35
 
-  ! *               [ reduce using rule 13 (expression -> expression - expression .) ]
+  ! MULTIPLY        [ reduce using rule 13 (expression -> expression - expression .) ]
   ! /               [ reduce using rule 13 (expression -> expression - expression .) ]
   ! +               [ shift and go to state 32 ]
   ! -               [ shift and go to state 34 ]
   ! IN              [ shift and go to state 37 ]
   ! EQ              [ shift and go to state 31 ]
-  ! NEQ             [ shift and go to state 40 ]
+  ! NEQ             [ shift and go to state 41 ]
   ! GEQ             [ shift and go to state 29 ]
   ! LEQ             [ shift and go to state 36 ]
-  ! SG              [ shift and go to state 38 ]
-  ! SL              [ shift and go to state 30 ]
-  ! [               [ shift and go to state 39 ]
+  ! SG              [ shift and go to state 39 ]
+  ! SL              [ shift and go to state 33 ]
+  ! POWER           [ shift and go to state 30 ]
+  ! [               [ shift and go to state 40 ]
 
 
-state 54
+state 55
 
     (15) expression -> expression / expression .
     (12) expression -> expression . + expression
     (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
+    (14) expression -> expression . MULTIPLY expression
     (15) expression -> expression . / expression
     (16) expression -> expression . IN expression
     (17) expression -> expression . EQ expression
@@ -1920,11 +2043,12 @@ state 54
     (20) expression -> expression . LEQ expression
     (21) expression -> expression . SG expression
     (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
 
     +               reduce using rule 15 (expression -> expression / expression .)
     -               reduce using rule 15 (expression -> expression / expression .)
-    *               reduce using rule 15 (expression -> expression / expression .)
+    MULTIPLY        reduce using rule 15 (expression -> expression / expression .)
     /               reduce using rule 15 (expression -> expression / expression .)
     IN              reduce using rule 15 (expression -> expression / expression .)
     EQ              reduce using rule 15 (expression -> expression / expression .)
@@ -1933,6 +2057,7 @@ state 54
     LEQ             reduce using rule 15 (expression -> expression / expression .)
     SG              reduce using rule 15 (expression -> expression / expression .)
     SL              reduce using rule 15 (expression -> expression / expression .)
+    POWER           reduce using rule 15 (expression -> expression / expression .)
     [               reduce using rule 15 (expression -> expression / expression .)
     ;               reduce using rule 15 (expression -> expression / expression .)
     )               reduce using rule 15 (expression -> expression / expression .)
@@ -1941,24 +2066,25 @@ state 54
 
   ! +               [ shift and go to state 32 ]
   ! -               [ shift and go to state 34 ]
-  ! *               [ shift and go to state 33 ]
+  ! MULTIPLY        [ shift and go to state 38 ]
   ! /               [ shift and go to state 35 ]
   ! IN              [ shift and go to state 37 ]
   ! EQ              [ shift and go to state 31 ]
-  ! NEQ             [ shift and go to state 40 ]
+  ! NEQ             [ shift and go to state 41 ]
   ! GEQ             [ shift and go to state 29 ]
   ! LEQ             [ shift and go to state 36 ]
-  ! SG              [ shift and go to state 38 ]
-  ! SL              [ shift and go to state 30 ]
-  ! [               [ shift and go to state 39 ]
+  ! SG              [ shift and go to state 39 ]
+  ! SL              [ shift and go to state 33 ]
+  ! POWER           [ shift and go to state 30 ]
+  ! [               [ shift and go to state 40 ]
 
 
-state 55
+state 56
 
     (20) expression -> expression LEQ expression .
     (12) expression -> expression . + expression
     (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
+    (14) expression -> expression . MULTIPLY expression
     (15) expression -> expression . / expression
     (16) expression -> expression . IN expression
     (17) expression -> expression . EQ expression
@@ -1967,11 +2093,12 @@ state 55
     (20) expression -> expression . LEQ expression
     (21) expression -> expression . SG expression
     (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
 
   ! shift/reduce conflict for + resolved as shift
   ! shift/reduce conflict for - resolved as shift
-  ! shift/reduce conflict for * resolved as shift
+  ! shift/reduce conflict for MULTIPLY resolved as shift
   ! shift/reduce conflict for / resolved as shift
   ! shift/reduce conflict for IN resolved as shift
   ! shift/reduce conflict for EQ resolved as shift
@@ -1980,6 +2107,7 @@ state 55
   ! shift/reduce conflict for LEQ resolved as shift
   ! shift/reduce conflict for SG resolved as shift
   ! shift/reduce conflict for SL resolved as shift
+  ! shift/reduce conflict for POWER resolved as shift
   ! shift/reduce conflict for [ resolved as shift
     ;               reduce using rule 20 (expression -> expression LEQ expression .)
     )               reduce using rule 20 (expression -> expression LEQ expression .)
@@ -1987,20 +2115,21 @@ state 55
     {               reduce using rule 20 (expression -> expression LEQ expression .)
     +               shift and go to state 32
     -               shift and go to state 34
-    *               shift and go to state 33
+    MULTIPLY        shift and go to state 38
     /               shift and go to state 35
     IN              shift and go to state 37
     EQ              shift and go to state 31
-    NEQ             shift and go to state 40
+    NEQ             shift and go to state 41
     GEQ             shift and go to state 29
     LEQ             shift and go to state 36
-    SG              shift and go to state 38
-    SL              shift and go to state 30
-    [               shift and go to state 39
+    SG              shift and go to state 39
+    SL              shift and go to state 33
+    POWER           shift and go to state 30
+    [               shift and go to state 40
 
   ! +               [ reduce using rule 20 (expression -> expression LEQ expression .) ]
   ! -               [ reduce using rule 20 (expression -> expression LEQ expression .) ]
-  ! *               [ reduce using rule 20 (expression -> expression LEQ expression .) ]
+  ! MULTIPLY        [ reduce using rule 20 (expression -> expression LEQ expression .) ]
   ! /               [ reduce using rule 20 (expression -> expression LEQ expression .) ]
   ! IN              [ reduce using rule 20 (expression -> expression LEQ expression .) ]
   ! EQ              [ reduce using rule 20 (expression -> expression LEQ expression .) ]
@@ -2009,15 +2138,16 @@ state 55
   ! LEQ             [ reduce using rule 20 (expression -> expression LEQ expression .) ]
   ! SG              [ reduce using rule 20 (expression -> expression LEQ expression .) ]
   ! SL              [ reduce using rule 20 (expression -> expression LEQ expression .) ]
+  ! POWER           [ reduce using rule 20 (expression -> expression LEQ expression .) ]
   ! [               [ reduce using rule 20 (expression -> expression LEQ expression .) ]
 
 
-state 56
+state 57
 
     (16) expression -> expression IN expression .
     (12) expression -> expression . + expression
     (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
+    (14) expression -> expression . MULTIPLY expression
     (15) expression -> expression . / expression
     (16) expression -> expression . IN expression
     (17) expression -> expression . EQ expression
@@ -2026,11 +2156,12 @@ state 56
     (20) expression -> expression . LEQ expression
     (21) expression -> expression . SG expression
     (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
 
   ! shift/reduce conflict for + resolved as shift
   ! shift/reduce conflict for - resolved as shift
-  ! shift/reduce conflict for * resolved as shift
+  ! shift/reduce conflict for MULTIPLY resolved as shift
   ! shift/reduce conflict for / resolved as shift
   ! shift/reduce conflict for IN resolved as shift
   ! shift/reduce conflict for EQ resolved as shift
@@ -2039,6 +2170,7 @@ state 56
   ! shift/reduce conflict for LEQ resolved as shift
   ! shift/reduce conflict for SG resolved as shift
   ! shift/reduce conflict for SL resolved as shift
+  ! shift/reduce conflict for POWER resolved as shift
   ! shift/reduce conflict for [ resolved as shift
     ;               reduce using rule 16 (expression -> expression IN expression .)
     )               reduce using rule 16 (expression -> expression IN expression .)
@@ -2046,20 +2178,21 @@ state 56
     {               reduce using rule 16 (expression -> expression IN expression .)
     +               shift and go to state 32
     -               shift and go to state 34
-    *               shift and go to state 33
+    MULTIPLY        shift and go to state 38
     /               shift and go to state 35
     IN              shift and go to state 37
     EQ              shift and go to state 31
-    NEQ             shift and go to state 40
+    NEQ             shift and go to state 41
     GEQ             shift and go to state 29
     LEQ             shift and go to state 36
-    SG              shift and go to state 38
-    SL              shift and go to state 30
-    [               shift and go to state 39
+    SG              shift and go to state 39
+    SL              shift and go to state 33
+    POWER           shift and go to state 30
+    [               shift and go to state 40
 
   ! +               [ reduce using rule 16 (expression -> expression IN expression .) ]
   ! -               [ reduce using rule 16 (expression -> expression IN expression .) ]
-  ! *               [ reduce using rule 16 (expression -> expression IN expression .) ]
+  ! MULTIPLY        [ reduce using rule 16 (expression -> expression IN expression .) ]
   ! /               [ reduce using rule 16 (expression -> expression IN expression .) ]
   ! IN              [ reduce using rule 16 (expression -> expression IN expression .) ]
   ! EQ              [ reduce using rule 16 (expression -> expression IN expression .) ]
@@ -2068,15 +2201,16 @@ state 56
   ! LEQ             [ reduce using rule 16 (expression -> expression IN expression .) ]
   ! SG              [ reduce using rule 16 (expression -> expression IN expression .) ]
   ! SL              [ reduce using rule 16 (expression -> expression IN expression .) ]
+  ! POWER           [ reduce using rule 16 (expression -> expression IN expression .) ]
   ! [               [ reduce using rule 16 (expression -> expression IN expression .) ]
 
 
-state 57
+state 58
 
-    (21) expression -> expression SG expression .
+    (14) expression -> expression MULTIPLY expression .
     (12) expression -> expression . + expression
     (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
+    (14) expression -> expression . MULTIPLY expression
     (15) expression -> expression . / expression
     (16) expression -> expression . IN expression
     (17) expression -> expression . EQ expression
@@ -2085,11 +2219,62 @@ state 57
     (20) expression -> expression . LEQ expression
     (21) expression -> expression . SG expression
     (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
+
+    +               reduce using rule 14 (expression -> expression MULTIPLY expression .)
+    -               reduce using rule 14 (expression -> expression MULTIPLY expression .)
+    MULTIPLY        reduce using rule 14 (expression -> expression MULTIPLY expression .)
+    /               reduce using rule 14 (expression -> expression MULTIPLY expression .)
+    IN              reduce using rule 14 (expression -> expression MULTIPLY expression .)
+    EQ              reduce using rule 14 (expression -> expression MULTIPLY expression .)
+    NEQ             reduce using rule 14 (expression -> expression MULTIPLY expression .)
+    GEQ             reduce using rule 14 (expression -> expression MULTIPLY expression .)
+    LEQ             reduce using rule 14 (expression -> expression MULTIPLY expression .)
+    SG              reduce using rule 14 (expression -> expression MULTIPLY expression .)
+    SL              reduce using rule 14 (expression -> expression MULTIPLY expression .)
+    POWER           reduce using rule 14 (expression -> expression MULTIPLY expression .)
+    [               reduce using rule 14 (expression -> expression MULTIPLY expression .)
+    ;               reduce using rule 14 (expression -> expression MULTIPLY expression .)
+    )               reduce using rule 14 (expression -> expression MULTIPLY expression .)
+    ]               reduce using rule 14 (expression -> expression MULTIPLY expression .)
+    {               reduce using rule 14 (expression -> expression MULTIPLY expression .)
+
+  ! +               [ shift and go to state 32 ]
+  ! -               [ shift and go to state 34 ]
+  ! MULTIPLY        [ shift and go to state 38 ]
+  ! /               [ shift and go to state 35 ]
+  ! IN              [ shift and go to state 37 ]
+  ! EQ              [ shift and go to state 31 ]
+  ! NEQ             [ shift and go to state 41 ]
+  ! GEQ             [ shift and go to state 29 ]
+  ! LEQ             [ shift and go to state 36 ]
+  ! SG              [ shift and go to state 39 ]
+  ! SL              [ shift and go to state 33 ]
+  ! POWER           [ shift and go to state 30 ]
+  ! [               [ shift and go to state 40 ]
+
+
+state 59
+
+    (21) expression -> expression SG expression .
+    (12) expression -> expression . + expression
+    (13) expression -> expression . - expression
+    (14) expression -> expression . MULTIPLY expression
+    (15) expression -> expression . / expression
+    (16) expression -> expression . IN expression
+    (17) expression -> expression . EQ expression
+    (18) expression -> expression . NEQ expression
+    (19) expression -> expression . GEQ expression
+    (20) expression -> expression . LEQ expression
+    (21) expression -> expression . SG expression
+    (22) expression -> expression . SL expression
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
 
   ! shift/reduce conflict for + resolved as shift
   ! shift/reduce conflict for - resolved as shift
-  ! shift/reduce conflict for * resolved as shift
+  ! shift/reduce conflict for MULTIPLY resolved as shift
   ! shift/reduce conflict for / resolved as shift
   ! shift/reduce conflict for IN resolved as shift
   ! shift/reduce conflict for EQ resolved as shift
@@ -2098,6 +2283,7 @@ state 57
   ! shift/reduce conflict for LEQ resolved as shift
   ! shift/reduce conflict for SG resolved as shift
   ! shift/reduce conflict for SL resolved as shift
+  ! shift/reduce conflict for POWER resolved as shift
   ! shift/reduce conflict for [ resolved as shift
     ;               reduce using rule 21 (expression -> expression SG expression .)
     )               reduce using rule 21 (expression -> expression SG expression .)
@@ -2105,20 +2291,21 @@ state 57
     {               reduce using rule 21 (expression -> expression SG expression .)
     +               shift and go to state 32
     -               shift and go to state 34
-    *               shift and go to state 33
+    MULTIPLY        shift and go to state 38
     /               shift and go to state 35
     IN              shift and go to state 37
     EQ              shift and go to state 31
-    NEQ             shift and go to state 40
+    NEQ             shift and go to state 41
     GEQ             shift and go to state 29
     LEQ             shift and go to state 36
-    SG              shift and go to state 38
-    SL              shift and go to state 30
-    [               shift and go to state 39
+    SG              shift and go to state 39
+    SL              shift and go to state 33
+    POWER           shift and go to state 30
+    [               shift and go to state 40
 
   ! +               [ reduce using rule 21 (expression -> expression SG expression .) ]
   ! -               [ reduce using rule 21 (expression -> expression SG expression .) ]
-  ! *               [ reduce using rule 21 (expression -> expression SG expression .) ]
+  ! MULTIPLY        [ reduce using rule 21 (expression -> expression SG expression .) ]
   ! /               [ reduce using rule 21 (expression -> expression SG expression .) ]
   ! IN              [ reduce using rule 21 (expression -> expression SG expression .) ]
   ! EQ              [ reduce using rule 21 (expression -> expression SG expression .) ]
@@ -2127,15 +2314,16 @@ state 57
   ! LEQ             [ reduce using rule 21 (expression -> expression SG expression .) ]
   ! SG              [ reduce using rule 21 (expression -> expression SG expression .) ]
   ! SL              [ reduce using rule 21 (expression -> expression SG expression .) ]
+  ! POWER           [ reduce using rule 21 (expression -> expression SG expression .) ]
   ! [               [ reduce using rule 21 (expression -> expression SG expression .) ]
 
 
-state 58
+state 60
 
-    (25) expression -> expression [ expression . ]
+    (26) expression -> expression [ expression . ]
     (12) expression -> expression . + expression
     (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
+    (14) expression -> expression . MULTIPLY expression
     (15) expression -> expression . / expression
     (16) expression -> expression . IN expression
     (17) expression -> expression . EQ expression
@@ -2144,29 +2332,31 @@ state 58
     (20) expression -> expression . LEQ expression
     (21) expression -> expression . SG expression
     (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
 
-    ]               shift and go to state 64
+    ]               shift and go to state 66
     +               shift and go to state 32
     -               shift and go to state 34
-    *               shift and go to state 33
+    MULTIPLY        shift and go to state 38
     /               shift and go to state 35
     IN              shift and go to state 37
     EQ              shift and go to state 31
-    NEQ             shift and go to state 40
+    NEQ             shift and go to state 41
     GEQ             shift and go to state 29
     LEQ             shift and go to state 36
-    SG              shift and go to state 38
-    SL              shift and go to state 30
-    [               shift and go to state 39
+    SG              shift and go to state 39
+    SL              shift and go to state 33
+    POWER           shift and go to state 30
+    [               shift and go to state 40
 
 
-state 59
+state 61
 
     (18) expression -> expression NEQ expression .
     (12) expression -> expression . + expression
     (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
+    (14) expression -> expression . MULTIPLY expression
     (15) expression -> expression . / expression
     (16) expression -> expression . IN expression
     (17) expression -> expression . EQ expression
@@ -2175,11 +2365,12 @@ state 59
     (20) expression -> expression . LEQ expression
     (21) expression -> expression . SG expression
     (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
 
   ! shift/reduce conflict for + resolved as shift
   ! shift/reduce conflict for - resolved as shift
-  ! shift/reduce conflict for * resolved as shift
+  ! shift/reduce conflict for MULTIPLY resolved as shift
   ! shift/reduce conflict for / resolved as shift
   ! shift/reduce conflict for IN resolved as shift
   ! shift/reduce conflict for EQ resolved as shift
@@ -2188,6 +2379,7 @@ state 59
   ! shift/reduce conflict for LEQ resolved as shift
   ! shift/reduce conflict for SG resolved as shift
   ! shift/reduce conflict for SL resolved as shift
+  ! shift/reduce conflict for POWER resolved as shift
   ! shift/reduce conflict for [ resolved as shift
     ;               reduce using rule 18 (expression -> expression NEQ expression .)
     )               reduce using rule 18 (expression -> expression NEQ expression .)
@@ -2195,20 +2387,21 @@ state 59
     {               reduce using rule 18 (expression -> expression NEQ expression .)
     +               shift and go to state 32
     -               shift and go to state 34
-    *               shift and go to state 33
+    MULTIPLY        shift and go to state 38
     /               shift and go to state 35
     IN              shift and go to state 37
     EQ              shift and go to state 31
-    NEQ             shift and go to state 40
+    NEQ             shift and go to state 41
     GEQ             shift and go to state 29
     LEQ             shift and go to state 36
-    SG              shift and go to state 38
-    SL              shift and go to state 30
-    [               shift and go to state 39
+    SG              shift and go to state 39
+    SL              shift and go to state 33
+    POWER           shift and go to state 30
+    [               shift and go to state 40
 
   ! +               [ reduce using rule 18 (expression -> expression NEQ expression .) ]
   ! -               [ reduce using rule 18 (expression -> expression NEQ expression .) ]
-  ! *               [ reduce using rule 18 (expression -> expression NEQ expression .) ]
+  ! MULTIPLY        [ reduce using rule 18 (expression -> expression NEQ expression .) ]
   ! /               [ reduce using rule 18 (expression -> expression NEQ expression .) ]
   ! IN              [ reduce using rule 18 (expression -> expression NEQ expression .) ]
   ! EQ              [ reduce using rule 18 (expression -> expression NEQ expression .) ]
@@ -2217,22 +2410,23 @@ state 59
   ! LEQ             [ reduce using rule 18 (expression -> expression NEQ expression .) ]
   ! SG              [ reduce using rule 18 (expression -> expression NEQ expression .) ]
   ! SL              [ reduce using rule 18 (expression -> expression NEQ expression .) ]
+  ! POWER           [ reduce using rule 18 (expression -> expression NEQ expression .) ]
   ! [               [ reduce using rule 18 (expression -> expression NEQ expression .) ]
 
 
-state 60
+state 62
 
     (4) statementblock -> WHILE ( expression ) . { statementblock }
 
-    {               shift and go to state 65
+    {               shift and go to state 67
 
 
-state 61
+state 63
 
     (8) statementblock -> FOR NAME IN expression . { statementblock }
     (12) expression -> expression . + expression
     (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
+    (14) expression -> expression . MULTIPLY expression
     (15) expression -> expression . / expression
     (16) expression -> expression . IN expression
     (17) expression -> expression . EQ expression
@@ -2241,29 +2435,31 @@ state 61
     (20) expression -> expression . LEQ expression
     (21) expression -> expression . SG expression
     (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
 
-    {               shift and go to state 66
+    {               shift and go to state 68
     +               shift and go to state 32
     -               shift and go to state 34
-    *               shift and go to state 33
+    MULTIPLY        shift and go to state 38
     /               shift and go to state 35
     IN              shift and go to state 37
     EQ              shift and go to state 31
-    NEQ             shift and go to state 40
+    NEQ             shift and go to state 41
     GEQ             shift and go to state 29
     LEQ             shift and go to state 36
-    SG              shift and go to state 38
-    SL              shift and go to state 30
-    [               shift and go to state 39
+    SG              shift and go to state 39
+    SL              shift and go to state 33
+    POWER           shift and go to state 30
+    [               shift and go to state 40
 
 
-state 62
+state 64
 
     (7) statementblock -> FOR ( expression ; . expression ; expression ) { statementblock }
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -2272,16 +2468,17 @@ state 62
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     -               shift and go to state 6
     (               shift and go to state 5
@@ -2292,39 +2489,40 @@ state 62
     NAME            shift and go to state 12
     TEST            shift and go to state 15
 
-    expression                     shift and go to state 67
+    expression                     shift and go to state 69
 
-state 63
+state 65
 
     (5) statementblock -> IF ( expression ) . { statementblock }
     (6) statementblock -> IF ( expression ) . { statementblock } ELSE { statementblock }
 
-    {               shift and go to state 68
+    {               shift and go to state 70
 
 
-state 64
+state 66
 
-    (25) expression -> expression [ expression ] .
+    (26) expression -> expression [ expression ] .
 
-    +               reduce using rule 25 (expression -> expression [ expression ] .)
-    -               reduce using rule 25 (expression -> expression [ expression ] .)
-    *               reduce using rule 25 (expression -> expression [ expression ] .)
-    /               reduce using rule 25 (expression -> expression [ expression ] .)
-    IN              reduce using rule 25 (expression -> expression [ expression ] .)
-    EQ              reduce using rule 25 (expression -> expression [ expression ] .)
-    NEQ             reduce using rule 25 (expression -> expression [ expression ] .)
-    GEQ             reduce using rule 25 (expression -> expression [ expression ] .)
-    LEQ             reduce using rule 25 (expression -> expression [ expression ] .)
-    SG              reduce using rule 25 (expression -> expression [ expression ] .)
-    SL              reduce using rule 25 (expression -> expression [ expression ] .)
-    [               reduce using rule 25 (expression -> expression [ expression ] .)
-    ;               reduce using rule 25 (expression -> expression [ expression ] .)
-    )               reduce using rule 25 (expression -> expression [ expression ] .)
-    ]               reduce using rule 25 (expression -> expression [ expression ] .)
-    {               reduce using rule 25 (expression -> expression [ expression ] .)
+    +               reduce using rule 26 (expression -> expression [ expression ] .)
+    -               reduce using rule 26 (expression -> expression [ expression ] .)
+    MULTIPLY        reduce using rule 26 (expression -> expression [ expression ] .)
+    /               reduce using rule 26 (expression -> expression [ expression ] .)
+    IN              reduce using rule 26 (expression -> expression [ expression ] .)
+    EQ              reduce using rule 26 (expression -> expression [ expression ] .)
+    NEQ             reduce using rule 26 (expression -> expression [ expression ] .)
+    GEQ             reduce using rule 26 (expression -> expression [ expression ] .)
+    LEQ             reduce using rule 26 (expression -> expression [ expression ] .)
+    SG              reduce using rule 26 (expression -> expression [ expression ] .)
+    SL              reduce using rule 26 (expression -> expression [ expression ] .)
+    POWER           reduce using rule 26 (expression -> expression [ expression ] .)
+    [               reduce using rule 26 (expression -> expression [ expression ] .)
+    ;               reduce using rule 26 (expression -> expression [ expression ] .)
+    )               reduce using rule 26 (expression -> expression [ expression ] .)
+    ]               reduce using rule 26 (expression -> expression [ expression ] .)
+    {               reduce using rule 26 (expression -> expression [ expression ] .)
 
 
-state 65
+state 67
 
     (4) statementblock -> WHILE ( expression ) { . statementblock }
     (3) statementblock -> . { statementlist }
@@ -2338,7 +2536,7 @@ state 65
     (11) statement -> . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -2347,16 +2545,17 @@ state 65
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     {               shift and go to state 16
     WHILE           shift and go to state 4
@@ -2372,11 +2571,11 @@ state 65
     NAME            shift and go to state 12
     TEST            shift and go to state 15
 
-    statementblock                 shift and go to state 69
+    statementblock                 shift and go to state 71
     expression                     shift and go to state 17
     statement                      shift and go to state 7
 
-state 66
+state 68
 
     (8) statementblock -> FOR NAME IN expression { . statementblock }
     (3) statementblock -> . { statementlist }
@@ -2390,7 +2589,7 @@ state 66
     (11) statement -> . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -2399,100 +2598,17 @@ state 66
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
-
-    {               shift and go to state 16
-    WHILE           shift and go to state 4
-    IF              shift and go to state 10
-    FOR             shift and go to state 9
-    FILTERON        shift and go to state 1
-    -               shift and go to state 6
-    (               shift and go to state 5
-    BOOL            shift and go to state 14
-    NUMBER          shift and go to state 2
-    STRING          shift and go to state 8
-    OBSERVATION     shift and go to state 13
-    NAME            shift and go to state 12
-    TEST            shift and go to state 15
-
-    statementblock                 shift and go to state 70
-    expression                     shift and go to state 17
-    statement                      shift and go to state 7
-
-state 67
-
-    (7) statementblock -> FOR ( expression ; expression . ; expression ) { statementblock }
-    (12) expression -> expression . + expression
-    (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
-    (15) expression -> expression . / expression
-    (16) expression -> expression . IN expression
-    (17) expression -> expression . EQ expression
-    (18) expression -> expression . NEQ expression
-    (19) expression -> expression . GEQ expression
-    (20) expression -> expression . LEQ expression
-    (21) expression -> expression . SG expression
-    (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
-
-    ;               shift and go to state 71
-    +               shift and go to state 32
-    -               shift and go to state 34
-    *               shift and go to state 33
-    /               shift and go to state 35
-    IN              shift and go to state 37
-    EQ              shift and go to state 31
-    NEQ             shift and go to state 40
-    GEQ             shift and go to state 29
-    LEQ             shift and go to state 36
-    SG              shift and go to state 38
-    SL              shift and go to state 30
-    [               shift and go to state 39
-
-
-state 68
-
-    (5) statementblock -> IF ( expression ) { . statementblock }
-    (6) statementblock -> IF ( expression ) { . statementblock } ELSE { statementblock }
-    (3) statementblock -> . { statementlist }
-    (4) statementblock -> . WHILE ( expression ) { statementblock }
-    (5) statementblock -> . IF ( expression ) { statementblock }
-    (6) statementblock -> . IF ( expression ) { statementblock } ELSE { statementblock }
-    (7) statementblock -> . FOR ( expression ; expression ; expression ) { statementblock }
-    (8) statementblock -> . FOR NAME IN expression { statementblock }
-    (9) statementblock -> . statement ;
-    (10) statement -> . FILTERON expression
-    (11) statement -> . expression
-    (12) expression -> . expression + expression
-    (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
-    (15) expression -> . expression / expression
-    (16) expression -> . expression IN expression
-    (17) expression -> . expression EQ expression
-    (18) expression -> . expression NEQ expression
-    (19) expression -> . expression GEQ expression
-    (20) expression -> . expression LEQ expression
-    (21) expression -> . expression SG expression
-    (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     {               shift and go to state 16
     WHILE           shift and go to state 4
@@ -2514,24 +2630,53 @@ state 68
 
 state 69
 
-    (4) statementblock -> WHILE ( expression ) { statementblock . }
+    (7) statementblock -> FOR ( expression ; expression . ; expression ) { statementblock }
+    (12) expression -> expression . + expression
+    (13) expression -> expression . - expression
+    (14) expression -> expression . MULTIPLY expression
+    (15) expression -> expression . / expression
+    (16) expression -> expression . IN expression
+    (17) expression -> expression . EQ expression
+    (18) expression -> expression . NEQ expression
+    (19) expression -> expression . GEQ expression
+    (20) expression -> expression . LEQ expression
+    (21) expression -> expression . SG expression
+    (22) expression -> expression . SL expression
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
 
-    }               shift and go to state 73
+    ;               shift and go to state 73
+    +               shift and go to state 32
+    -               shift and go to state 34
+    MULTIPLY        shift and go to state 38
+    /               shift and go to state 35
+    IN              shift and go to state 37
+    EQ              shift and go to state 31
+    NEQ             shift and go to state 41
+    GEQ             shift and go to state 29
+    LEQ             shift and go to state 36
+    SG              shift and go to state 39
+    SL              shift and go to state 33
+    POWER           shift and go to state 30
+    [               shift and go to state 40
 
 
 state 70
 
-    (8) statementblock -> FOR NAME IN expression { statementblock . }
-
-    }               shift and go to state 74
-
-
-state 71
-
-    (7) statementblock -> FOR ( expression ; expression ; . expression ) { statementblock }
+    (5) statementblock -> IF ( expression ) { . statementblock }
+    (6) statementblock -> IF ( expression ) { . statementblock } ELSE { statementblock }
+    (3) statementblock -> . { statementlist }
+    (4) statementblock -> . WHILE ( expression ) { statementblock }
+    (5) statementblock -> . IF ( expression ) { statementblock }
+    (6) statementblock -> . IF ( expression ) { statementblock } ELSE { statementblock }
+    (7) statementblock -> . FOR ( expression ; expression ; expression ) { statementblock }
+    (8) statementblock -> . FOR NAME IN expression { statementblock }
+    (9) statementblock -> . statement ;
+    (10) statement -> . FILTERON expression
+    (11) statement -> . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -2540,16 +2685,75 @@ state 71
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
+
+    {               shift and go to state 16
+    WHILE           shift and go to state 4
+    IF              shift and go to state 10
+    FOR             shift and go to state 9
+    FILTERON        shift and go to state 1
+    -               shift and go to state 6
+    (               shift and go to state 5
+    BOOL            shift and go to state 14
+    NUMBER          shift and go to state 2
+    STRING          shift and go to state 8
+    OBSERVATION     shift and go to state 13
+    NAME            shift and go to state 12
+    TEST            shift and go to state 15
+
+    statementblock                 shift and go to state 74
+    expression                     shift and go to state 17
+    statement                      shift and go to state 7
+
+state 71
+
+    (4) statementblock -> WHILE ( expression ) { statementblock . }
+
+    }               shift and go to state 75
+
+
+state 72
+
+    (8) statementblock -> FOR NAME IN expression { statementblock . }
+
+    }               shift and go to state 76
+
+
+state 73
+
+    (7) statementblock -> FOR ( expression ; expression ; . expression ) { statementblock }
+    (12) expression -> . expression + expression
+    (13) expression -> . expression - expression
+    (14) expression -> . expression MULTIPLY expression
+    (15) expression -> . expression / expression
+    (16) expression -> . expression IN expression
+    (17) expression -> . expression EQ expression
+    (18) expression -> . expression NEQ expression
+    (19) expression -> . expression GEQ expression
+    (20) expression -> . expression LEQ expression
+    (21) expression -> . expression SG expression
+    (22) expression -> . expression SL expression
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     -               shift and go to state 6
     (               shift and go to state 5
@@ -2560,17 +2764,17 @@ state 71
     NAME            shift and go to state 12
     TEST            shift and go to state 15
 
-    expression                     shift and go to state 75
+    expression                     shift and go to state 77
 
-state 72
+state 74
 
     (5) statementblock -> IF ( expression ) { statementblock . }
     (6) statementblock -> IF ( expression ) { statementblock . } ELSE { statementblock }
 
-    }               shift and go to state 76
+    }               shift and go to state 78
 
 
-state 73
+state 75
 
     (4) statementblock -> WHILE ( expression ) { statementblock } .
 
@@ -2591,7 +2795,7 @@ state 73
     $end            reduce using rule 4 (statementblock -> WHILE ( expression ) { statementblock } .)
 
 
-state 74
+state 76
 
     (8) statementblock -> FOR NAME IN expression { statementblock } .
 
@@ -2612,12 +2816,12 @@ state 74
     $end            reduce using rule 8 (statementblock -> FOR NAME IN expression { statementblock } .)
 
 
-state 75
+state 77
 
     (7) statementblock -> FOR ( expression ; expression ; expression . ) { statementblock }
     (12) expression -> expression . + expression
     (13) expression -> expression . - expression
-    (14) expression -> expression . * expression
+    (14) expression -> expression . MULTIPLY expression
     (15) expression -> expression . / expression
     (16) expression -> expression . IN expression
     (17) expression -> expression . EQ expression
@@ -2626,24 +2830,26 @@ state 75
     (20) expression -> expression . LEQ expression
     (21) expression -> expression . SG expression
     (22) expression -> expression . SL expression
-    (25) expression -> expression . [ expression ]
+    (23) expression -> expression . POWER expression
+    (26) expression -> expression . [ expression ]
 
-    )               shift and go to state 77
+    )               shift and go to state 79
     +               shift and go to state 32
     -               shift and go to state 34
-    *               shift and go to state 33
+    MULTIPLY        shift and go to state 38
     /               shift and go to state 35
     IN              shift and go to state 37
     EQ              shift and go to state 31
-    NEQ             shift and go to state 40
+    NEQ             shift and go to state 41
     GEQ             shift and go to state 29
     LEQ             shift and go to state 36
-    SG              shift and go to state 38
-    SL              shift and go to state 30
-    [               shift and go to state 39
+    SG              shift and go to state 39
+    SL              shift and go to state 33
+    POWER           shift and go to state 30
+    [               shift and go to state 40
 
 
-state 76
+state 78
 
     (5) statementblock -> IF ( expression ) { statementblock } .
     (6) statementblock -> IF ( expression ) { statementblock } . ELSE { statementblock }
@@ -2663,24 +2869,24 @@ state 76
     NAME            reduce using rule 5 (statementblock -> IF ( expression ) { statementblock } .)
     TEST            reduce using rule 5 (statementblock -> IF ( expression ) { statementblock } .)
     $end            reduce using rule 5 (statementblock -> IF ( expression ) { statementblock } .)
-    ELSE            shift and go to state 78
-
-
-state 77
-
-    (7) statementblock -> FOR ( expression ; expression ; expression ) . { statementblock }
-
-    {               shift and go to state 79
-
-
-state 78
-
-    (6) statementblock -> IF ( expression ) { statementblock } ELSE . { statementblock }
-
-    {               shift and go to state 80
+    ELSE            shift and go to state 80
 
 
 state 79
+
+    (7) statementblock -> FOR ( expression ; expression ; expression ) . { statementblock }
+
+    {               shift and go to state 81
+
+
+state 80
+
+    (6) statementblock -> IF ( expression ) { statementblock } ELSE . { statementblock }
+
+    {               shift and go to state 82
+
+
+state 81
 
     (7) statementblock -> FOR ( expression ; expression ; expression ) { . statementblock }
     (3) statementblock -> . { statementlist }
@@ -2694,7 +2900,7 @@ state 79
     (11) statement -> . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -2703,16 +2909,17 @@ state 79
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     {               shift and go to state 16
     WHILE           shift and go to state 4
@@ -2728,11 +2935,11 @@ state 79
     NAME            shift and go to state 12
     TEST            shift and go to state 15
 
-    statementblock                 shift and go to state 81
+    statementblock                 shift and go to state 83
     expression                     shift and go to state 17
     statement                      shift and go to state 7
 
-state 80
+state 82
 
     (6) statementblock -> IF ( expression ) { statementblock } ELSE { . statementblock }
     (3) statementblock -> . { statementlist }
@@ -2746,7 +2953,7 @@ state 80
     (11) statement -> . expression
     (12) expression -> . expression + expression
     (13) expression -> . expression - expression
-    (14) expression -> . expression * expression
+    (14) expression -> . expression MULTIPLY expression
     (15) expression -> . expression / expression
     (16) expression -> . expression IN expression
     (17) expression -> . expression EQ expression
@@ -2755,16 +2962,17 @@ state 80
     (20) expression -> . expression LEQ expression
     (21) expression -> . expression SG expression
     (22) expression -> . expression SL expression
-    (23) expression -> . - expression
-    (24) expression -> . ( expression )
-    (25) expression -> . expression [ expression ]
-    (26) expression -> . BOOL
-    (27) expression -> . NUMBER
-    (28) expression -> . STRING
-    (29) expression -> . OBSERVATION
-    (30) expression -> . NAME ASSIGN expression
-    (31) expression -> . NAME
-    (32) expression -> . TEST
+    (23) expression -> . expression POWER expression
+    (24) expression -> . - expression
+    (25) expression -> . ( expression )
+    (26) expression -> . expression [ expression ]
+    (27) expression -> . BOOL
+    (28) expression -> . NUMBER
+    (29) expression -> . STRING
+    (30) expression -> . OBSERVATION
+    (31) expression -> . NAME ASSIGN expression
+    (32) expression -> . NAME
+    (33) expression -> . TEST
 
     {               shift and go to state 16
     WHILE           shift and go to state 4
@@ -2780,25 +2988,25 @@ state 80
     NAME            shift and go to state 12
     TEST            shift and go to state 15
 
-    statementblock                 shift and go to state 82
+    statementblock                 shift and go to state 84
     expression                     shift and go to state 17
     statement                      shift and go to state 7
 
-state 81
+state 83
 
     (7) statementblock -> FOR ( expression ; expression ; expression ) { statementblock . }
 
-    }               shift and go to state 83
+    }               shift and go to state 85
 
 
-state 82
+state 84
 
     (6) statementblock -> IF ( expression ) { statementblock } ELSE { statementblock . }
 
-    }               shift and go to state 84
+    }               shift and go to state 86
 
 
-state 83
+state 85
 
     (7) statementblock -> FOR ( expression ; expression ; expression ) { statementblock } .
 
@@ -2819,7 +3027,7 @@ state 83
     $end            reduce using rule 7 (statementblock -> FOR ( expression ; expression ; expression ) { statementblock } .)
 
 
-state 84
+state 86
 
     (6) statementblock -> IF ( expression ) { statementblock } ELSE { statementblock } .
 
@@ -2842,33 +3050,22 @@ state 84
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for + in state 46 resolved as shift
-WARNING: shift/reduce conflict for - in state 46 resolved as shift
-WARNING: shift/reduce conflict for * in state 46 resolved as shift
-WARNING: shift/reduce conflict for / in state 46 resolved as shift
-WARNING: shift/reduce conflict for IN in state 46 resolved as shift
-WARNING: shift/reduce conflict for EQ in state 46 resolved as shift
-WARNING: shift/reduce conflict for NEQ in state 46 resolved as shift
-WARNING: shift/reduce conflict for GEQ in state 46 resolved as shift
-WARNING: shift/reduce conflict for LEQ in state 46 resolved as shift
-WARNING: shift/reduce conflict for SG in state 46 resolved as shift
-WARNING: shift/reduce conflict for SL in state 46 resolved as shift
-WARNING: shift/reduce conflict for [ in state 46 resolved as shift
-WARNING: shift/reduce conflict for + in state 48 resolved as shift
-WARNING: shift/reduce conflict for - in state 48 resolved as shift
-WARNING: shift/reduce conflict for * in state 48 resolved as shift
-WARNING: shift/reduce conflict for / in state 48 resolved as shift
-WARNING: shift/reduce conflict for IN in state 48 resolved as shift
-WARNING: shift/reduce conflict for EQ in state 48 resolved as shift
-WARNING: shift/reduce conflict for NEQ in state 48 resolved as shift
-WARNING: shift/reduce conflict for GEQ in state 48 resolved as shift
-WARNING: shift/reduce conflict for LEQ in state 48 resolved as shift
-WARNING: shift/reduce conflict for SG in state 48 resolved as shift
-WARNING: shift/reduce conflict for SL in state 48 resolved as shift
-WARNING: shift/reduce conflict for [ in state 48 resolved as shift
+WARNING: shift/reduce conflict for + in state 47 resolved as shift
+WARNING: shift/reduce conflict for - in state 47 resolved as shift
+WARNING: shift/reduce conflict for MULTIPLY in state 47 resolved as shift
+WARNING: shift/reduce conflict for / in state 47 resolved as shift
+WARNING: shift/reduce conflict for IN in state 47 resolved as shift
+WARNING: shift/reduce conflict for EQ in state 47 resolved as shift
+WARNING: shift/reduce conflict for NEQ in state 47 resolved as shift
+WARNING: shift/reduce conflict for GEQ in state 47 resolved as shift
+WARNING: shift/reduce conflict for LEQ in state 47 resolved as shift
+WARNING: shift/reduce conflict for SG in state 47 resolved as shift
+WARNING: shift/reduce conflict for SL in state 47 resolved as shift
+WARNING: shift/reduce conflict for POWER in state 47 resolved as shift
+WARNING: shift/reduce conflict for [ in state 47 resolved as shift
 WARNING: shift/reduce conflict for + in state 49 resolved as shift
 WARNING: shift/reduce conflict for - in state 49 resolved as shift
-WARNING: shift/reduce conflict for * in state 49 resolved as shift
+WARNING: shift/reduce conflict for MULTIPLY in state 49 resolved as shift
 WARNING: shift/reduce conflict for / in state 49 resolved as shift
 WARNING: shift/reduce conflict for IN in state 49 resolved as shift
 WARNING: shift/reduce conflict for EQ in state 49 resolved as shift
@@ -2877,10 +3074,11 @@ WARNING: shift/reduce conflict for GEQ in state 49 resolved as shift
 WARNING: shift/reduce conflict for LEQ in state 49 resolved as shift
 WARNING: shift/reduce conflict for SG in state 49 resolved as shift
 WARNING: shift/reduce conflict for SL in state 49 resolved as shift
+WARNING: shift/reduce conflict for POWER in state 49 resolved as shift
 WARNING: shift/reduce conflict for [ in state 49 resolved as shift
 WARNING: shift/reduce conflict for + in state 50 resolved as shift
 WARNING: shift/reduce conflict for - in state 50 resolved as shift
-WARNING: shift/reduce conflict for * in state 50 resolved as shift
+WARNING: shift/reduce conflict for MULTIPLY in state 50 resolved as shift
 WARNING: shift/reduce conflict for / in state 50 resolved as shift
 WARNING: shift/reduce conflict for IN in state 50 resolved as shift
 WARNING: shift/reduce conflict for EQ in state 50 resolved as shift
@@ -2889,22 +3087,37 @@ WARNING: shift/reduce conflict for GEQ in state 50 resolved as shift
 WARNING: shift/reduce conflict for LEQ in state 50 resolved as shift
 WARNING: shift/reduce conflict for SG in state 50 resolved as shift
 WARNING: shift/reduce conflict for SL in state 50 resolved as shift
+WARNING: shift/reduce conflict for POWER in state 50 resolved as shift
 WARNING: shift/reduce conflict for [ in state 50 resolved as shift
-WARNING: shift/reduce conflict for + in state 55 resolved as shift
-WARNING: shift/reduce conflict for - in state 55 resolved as shift
-WARNING: shift/reduce conflict for * in state 55 resolved as shift
-WARNING: shift/reduce conflict for / in state 55 resolved as shift
-WARNING: shift/reduce conflict for IN in state 55 resolved as shift
-WARNING: shift/reduce conflict for EQ in state 55 resolved as shift
-WARNING: shift/reduce conflict for NEQ in state 55 resolved as shift
-WARNING: shift/reduce conflict for GEQ in state 55 resolved as shift
-WARNING: shift/reduce conflict for LEQ in state 55 resolved as shift
-WARNING: shift/reduce conflict for SG in state 55 resolved as shift
-WARNING: shift/reduce conflict for SL in state 55 resolved as shift
-WARNING: shift/reduce conflict for [ in state 55 resolved as shift
+WARNING: shift/reduce conflict for + in state 51 resolved as shift
+WARNING: shift/reduce conflict for - in state 51 resolved as shift
+WARNING: shift/reduce conflict for MULTIPLY in state 51 resolved as shift
+WARNING: shift/reduce conflict for / in state 51 resolved as shift
+WARNING: shift/reduce conflict for IN in state 51 resolved as shift
+WARNING: shift/reduce conflict for EQ in state 51 resolved as shift
+WARNING: shift/reduce conflict for NEQ in state 51 resolved as shift
+WARNING: shift/reduce conflict for GEQ in state 51 resolved as shift
+WARNING: shift/reduce conflict for LEQ in state 51 resolved as shift
+WARNING: shift/reduce conflict for SG in state 51 resolved as shift
+WARNING: shift/reduce conflict for SL in state 51 resolved as shift
+WARNING: shift/reduce conflict for POWER in state 51 resolved as shift
+WARNING: shift/reduce conflict for [ in state 51 resolved as shift
+WARNING: shift/reduce conflict for + in state 53 resolved as shift
+WARNING: shift/reduce conflict for - in state 53 resolved as shift
+WARNING: shift/reduce conflict for MULTIPLY in state 53 resolved as shift
+WARNING: shift/reduce conflict for / in state 53 resolved as shift
+WARNING: shift/reduce conflict for IN in state 53 resolved as shift
+WARNING: shift/reduce conflict for EQ in state 53 resolved as shift
+WARNING: shift/reduce conflict for NEQ in state 53 resolved as shift
+WARNING: shift/reduce conflict for GEQ in state 53 resolved as shift
+WARNING: shift/reduce conflict for LEQ in state 53 resolved as shift
+WARNING: shift/reduce conflict for SG in state 53 resolved as shift
+WARNING: shift/reduce conflict for SL in state 53 resolved as shift
+WARNING: shift/reduce conflict for POWER in state 53 resolved as shift
+WARNING: shift/reduce conflict for [ in state 53 resolved as shift
 WARNING: shift/reduce conflict for + in state 56 resolved as shift
 WARNING: shift/reduce conflict for - in state 56 resolved as shift
-WARNING: shift/reduce conflict for * in state 56 resolved as shift
+WARNING: shift/reduce conflict for MULTIPLY in state 56 resolved as shift
 WARNING: shift/reduce conflict for / in state 56 resolved as shift
 WARNING: shift/reduce conflict for IN in state 56 resolved as shift
 WARNING: shift/reduce conflict for EQ in state 56 resolved as shift
@@ -2913,10 +3126,11 @@ WARNING: shift/reduce conflict for GEQ in state 56 resolved as shift
 WARNING: shift/reduce conflict for LEQ in state 56 resolved as shift
 WARNING: shift/reduce conflict for SG in state 56 resolved as shift
 WARNING: shift/reduce conflict for SL in state 56 resolved as shift
+WARNING: shift/reduce conflict for POWER in state 56 resolved as shift
 WARNING: shift/reduce conflict for [ in state 56 resolved as shift
 WARNING: shift/reduce conflict for + in state 57 resolved as shift
 WARNING: shift/reduce conflict for - in state 57 resolved as shift
-WARNING: shift/reduce conflict for * in state 57 resolved as shift
+WARNING: shift/reduce conflict for MULTIPLY in state 57 resolved as shift
 WARNING: shift/reduce conflict for / in state 57 resolved as shift
 WARNING: shift/reduce conflict for IN in state 57 resolved as shift
 WARNING: shift/reduce conflict for EQ in state 57 resolved as shift
@@ -2925,10 +3139,11 @@ WARNING: shift/reduce conflict for GEQ in state 57 resolved as shift
 WARNING: shift/reduce conflict for LEQ in state 57 resolved as shift
 WARNING: shift/reduce conflict for SG in state 57 resolved as shift
 WARNING: shift/reduce conflict for SL in state 57 resolved as shift
+WARNING: shift/reduce conflict for POWER in state 57 resolved as shift
 WARNING: shift/reduce conflict for [ in state 57 resolved as shift
 WARNING: shift/reduce conflict for + in state 59 resolved as shift
 WARNING: shift/reduce conflict for - in state 59 resolved as shift
-WARNING: shift/reduce conflict for * in state 59 resolved as shift
+WARNING: shift/reduce conflict for MULTIPLY in state 59 resolved as shift
 WARNING: shift/reduce conflict for / in state 59 resolved as shift
 WARNING: shift/reduce conflict for IN in state 59 resolved as shift
 WARNING: shift/reduce conflict for EQ in state 59 resolved as shift
@@ -2937,4 +3152,18 @@ WARNING: shift/reduce conflict for GEQ in state 59 resolved as shift
 WARNING: shift/reduce conflict for LEQ in state 59 resolved as shift
 WARNING: shift/reduce conflict for SG in state 59 resolved as shift
 WARNING: shift/reduce conflict for SL in state 59 resolved as shift
+WARNING: shift/reduce conflict for POWER in state 59 resolved as shift
 WARNING: shift/reduce conflict for [ in state 59 resolved as shift
+WARNING: shift/reduce conflict for + in state 61 resolved as shift
+WARNING: shift/reduce conflict for - in state 61 resolved as shift
+WARNING: shift/reduce conflict for MULTIPLY in state 61 resolved as shift
+WARNING: shift/reduce conflict for / in state 61 resolved as shift
+WARNING: shift/reduce conflict for IN in state 61 resolved as shift
+WARNING: shift/reduce conflict for EQ in state 61 resolved as shift
+WARNING: shift/reduce conflict for NEQ in state 61 resolved as shift
+WARNING: shift/reduce conflict for GEQ in state 61 resolved as shift
+WARNING: shift/reduce conflict for LEQ in state 61 resolved as shift
+WARNING: shift/reduce conflict for SG in state 61 resolved as shift
+WARNING: shift/reduce conflict for SL in state 61 resolved as shift
+WARNING: shift/reduce conflict for POWER in state 61 resolved as shift
+WARNING: shift/reduce conflict for [ in state 61 resolved as shift

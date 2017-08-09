@@ -84,12 +84,9 @@ def make_calculator(current_observation=None):
 
     def statementBlockControl(nodeAction):
         if nodeAction == 'WHILE':
-            whileFunction = lambda x : (evaluate(x[0]) and (evaluate(x[1]), whileFunction(x)) or 0)
             return whileFunction
         elif nodeAction == 'CFOR':
-            cforFunction = lambda x, toggle : (toggle or (evaluate(x[0]), True)) and (evaluate(x[1])) and (evaluate(x[3]), evaluate(x[2]), cforFunction(x, True))
-            cforFunctionStart = lambda x: cforFunction(x, False)
-            return cforFunctionStart
+            return cforFunction
         elif nodeAction == 'PYFOR':
             pyforStep = lambda x : lambda nextVal : (variableAssignment(x[0], nextVal), evaluate(x[2]))
             return lambda x: map(pyforStep(x), evaluate(x[1]))
@@ -101,6 +98,18 @@ def make_calculator(current_observation=None):
             return ifthenelseFunction
         else:
             return lambda x: 'STATEMENT BLOCK CONTROL ERROR'
+
+    def whileFunction(x):
+        while evaluate(x[0]):
+            evaluate(x[1])
+        return None
+
+    def cforFunction(x):
+        evaluate(x[0])
+        while evaluate(x[1]):
+            evaluate(x[2])
+            evaluate(x[3])
+        return None
 
     def statementDo(nodeAction):
         if nodeAction == 'EVALUATE':
@@ -135,6 +144,8 @@ def make_calculator(current_observation=None):
             return lambda x: evaluate(x[0]) > evaluate(x[1])
         elif nodeAction == 'SL':
             return lambda x: evaluate(x[0]) < evaluate(x[1])
+        elif nodeAction == 'POWER':
+            return lambda x: evaluate(x[0]) ** evaluate(x[1])
         else:
             return lambda x: 'EXPRESSION BINOP ERROR'
 

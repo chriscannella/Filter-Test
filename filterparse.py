@@ -5,7 +5,7 @@ tokens = filterlex.tokens
 # ------- Calculator tokenizing rules
 precedence = (
     ('left', '+', '-'),
-    ('left', '*', '/'),
+    ('left', 'MULTIPLY', '/'),
     ('right', 'UMINUS'),
 )
 
@@ -54,7 +54,7 @@ def p_statement_expr(p):
 def p_expression_binop(p):
     '''expression : expression '+' expression
                   | expression '-' expression
-                  | expression '*' expression
+                  | expression MULTIPLY expression
                   | expression '/' expression
                   | expression IN expression
                   | expression EQ expression
@@ -62,7 +62,8 @@ def p_expression_binop(p):
                   | expression GEQ expression
                   | expression LEQ expression
                   | expression SG expression
-                  | expression SL expression'''
+                  | expression SL expression
+                  | expression POWER expression'''
     if p[2] == '+':
         p[0] =  ('EXPRESSION', 'BINOP', 'ADD', p[1], p[3])
     elif p[2] == '-':
@@ -85,6 +86,8 @@ def p_expression_binop(p):
         p[0] = ('EXPRESSION', 'BINOP', 'SG', p[1], p[3])
     elif p[2] == '<':
         p[0] = ('EXPRESSION', 'BINOP', 'SL', p[1], p[3])
+    elif p[2] == '**':
+        p[0] = ('EXPRESSION', 'BINOP', 'POWER', p[1], p[3])
 
 def p_expression_uminus(p):
     "expression : '-' expression %prec UMINUS"
