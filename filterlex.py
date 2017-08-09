@@ -12,7 +12,9 @@ reserved = {
     'filteron' : 'FILTERON',
     'test' : 'TEST',
     'while' : 'WHILE',
-    'for' : 'FOR'
+    'for' : 'FOR',
+    'if' : 'IF',
+    'else': 'ELSE'
 }
 
 tokens += reserved.values()

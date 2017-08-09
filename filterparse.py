@@ -20,12 +20,19 @@ def p_statementlist_statementblock(p):
 def p_statementblock_statement(p):
     '''statementblock : '{' statementlist '}'
                       | WHILE '(' expression ')' '{' statementblock '}'
+                      | IF '(' expression ')' '{' statementblock '}'
+                      | IF '(' expression ')' '{' statementblock '}' ELSE '{' statementblock '}'
                       | FOR '(' expression ';' expression ';' expression ')' '{' statementblock '}'
                       | FOR NAME IN expression '{' statementblock '}' 
                       | statement ';' '''
     if(len(p) > 4):
         if p[1] == 'while':
             p[0] = ('STATEMENTBLOCK', 'CONTROL', 'WHILE', p[3], p[6])
+        elif p[1] == 'if':
+            if len(p) > 8:
+                p[0] = ('STATEMENTBLOCK', 'CONTROL', 'IFTHENELSE', p[3], p[6], p[10])
+            else:
+                p[0] = ('STATEMENTBLOCK', 'CONTROL', 'IFTHEN', p[3], p[6])
         elif p[1] == 'for':
             if len(p) > 8:
                 p[0] = ('STATEMENTBLOCK', 'CONTROL', 'CFOR', p[3], p[5], p[7], p[10])

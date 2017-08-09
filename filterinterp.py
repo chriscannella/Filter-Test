@@ -93,6 +93,12 @@ def make_calculator(current_observation=None):
         elif nodeAction == 'PYFOR':
             pyforStep = lambda x : lambda nextVal : (variableAssignment(x[0], nextVal), evaluate(x[2]))
             return lambda x: map(pyforStep(x), evaluate(x[1]))
+        elif nodeAction == 'IFTHEN':
+            ifthenFunction = lambda x : (evaluate(x[0]) and evaluate(x[1]))
+            return ifthenFunction
+        elif nodeAction == 'IFTHENELSE':
+            ifthenelseFunction = lambda x : (evaluate(x[0]) and evaluate(x[1])) or (evaluate(x[2]))
+            return ifthenelseFunction
         else:
             return lambda x: 'STATEMENT BLOCK CONTROL ERROR'
 

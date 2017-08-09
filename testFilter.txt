@@ -1,5 +1,8 @@
 x = 0;
-for entry in observation["list"]{
-  x = x + entry;
+if (x < 0){
+    x = 1;
+}
+else {
+    x = 2;
 }
 x;
