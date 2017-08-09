@@ -21,7 +21,7 @@ def make_calculator(current_observation=None):
 
     # ------- Internal calculator state
 
-    variables = {}       # Dictionary of stored variables
+    variables = {'filteron' : False}       # Dictionary of stored variables
 
     tokens = filterlex.tokens
     # ------- Calculator tokenizing rules
@@ -31,9 +31,22 @@ def make_calculator(current_observation=None):
         ('right', 'UMINUS'),
     )
 
+    def p_statementlist_statement(p):
+        '''statementlist : statementlist ';' statement
+                         | statement'''
+        if(len(p) > 2):
+            p[0] = p[3]
+        else:
+            p[0] = p[1]
+
     def p_statement_assign(p):
-        'statement : NAME "=" expression'
+        '''statement : NAME ASSIGN expression'''
         variables[p[1]] = p[3]
+        p[0] = None
+
+    def p_statement_filteron(p):
+        'statement : FILTERON expression'
+        variables['filteron'] = p[2]
         p[0] = None
 
     def p_statement_expr(p):
@@ -45,9 +58,15 @@ def make_calculator(current_observation=None):
                       | expression '-' expression
                       | expression '*' expression
                       | expression '/' expression
-                      | expression IN expression'''
+                      | expression IN expression
+                      | expression EQ expression
+                      | expression NEQ expression
+                      | expression GEQ expression
+                      | expression LEQ expression
+                      | expression SG expression
+                      | expression SL expression'''
         if p[2] == '+':
-            p[0] = p[1] + p[3]
+            p[0] =  p[1] + p[3]
         elif p[2] == '-':
             p[0] = p[1] - p[3]
         elif p[2] == '*':
@@ -56,6 +75,18 @@ def make_calculator(current_observation=None):
             p[0] = p[1] / p[3]
         elif p[2] == 'in':
             p[0] = p[1] in p[3]
+        elif p[2] == '==':
+            p[0] = p[1] == p[3]
+        elif p[2] == '!=':
+            p[0] = p[1] != p[3]
+        elif p[2] == '>=':
+            p[0] = p[1] >= p[3]
+        elif p[2] == '<=':
+            p[0] = p[1] <= p[3]
+        elif p[2] == '>':
+            p[0] = p[1] > p[3]
+        elif p[2] == '<':
+            p[0] = p[1] < p[3]
 
     def p_expression_uminus(p):
         "expression : '-' expression %prec UMINUS"
@@ -68,6 +99,10 @@ def make_calculator(current_observation=None):
     def p_expression_field(p):
         "expression : expression '[' expression ']'"
         p[0] = p[1][p[3]]
+
+    def p_expression_bool(p):
+        '''expression : BOOL'''
+        p[0] = p[1] == 'true'
 
     def p_expression_number(p):
         "expression : NUMBER"
@@ -89,6 +124,13 @@ def make_calculator(current_observation=None):
             print("Undefined name '%s'" % p[1])
             p[0] = 0
 
+    def p_expression_test(p):
+        "expression : TEST"
+        if variables['filteron']:
+            p[0] = True
+        else:
+            p[0] = False
+
     def p_error(p):
         if p:
             print("Syntax error at '%s'" % p.value)
@@ -107,13 +149,14 @@ def make_calculator(current_observation=None):
     return input
 
 # Make a calculator object and use it
-calc = make_calculator({'details' : {'mag' : 3}})
-
+testDict = {'details' : {'mag' : 3}}
+calc = make_calculator(testDict)
+testDict['details']['mag'] = 4
 while True:
     try:
         s = raw_input("calc > ")
     except EOFError:
         break
-    r = calc(s)
+    r = calc(s.lower())
     if r:
         print(r)

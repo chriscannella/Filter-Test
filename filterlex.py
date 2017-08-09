@@ -3,24 +3,38 @@ import ply.lex as lex
 # ------- Calculator tokenizing rules
 
 tokens = [
-    'NAME', 'NUMBER', 'STRING', 
+    'NAME', 'NUMBER', 'STRING', 'ASSIGN', 'EQ', 'NEQ', 'GEQ', 'LEQ', 'SG', 'SL', 'BOOL'
 ]
 
 reserved = {
     'in' : 'IN',
-    'observation' : 'OBSERVATION'
+    'observation' : 'OBSERVATION',
+    'filteron' : 'FILTERON',
+    'test' : 'TEST',
+    'while' : 'WHILE',
+    'for' : 'FOR'
 }
 
 tokens += reserved.values()
 
-literals = ['=', '+', '-', '*', '/', '(', ')', '[', ']']
+literals = ['+', '-', '*', '/', '(', ')', '[', ']','{', '}', ';', ':']
 
+t_EQ = "=="
+t_NEQ = "!="
+t_GEQ = ">="
+t_LEQ = "<="
+t_SG = ">"
+t_SL = "<"
+t_ASSIGN = r"="
 t_ignore = " \t"
+t_BOOL = r"true|false"
 
 
 
 def t_NAME(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
+    if t.value in ['true', 'false']:
+        t.type = 'BOOL'
     if t.value in reserved:
         t.type = reserved[t.value]
     return t

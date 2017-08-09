@@ -1,0 +1,5 @@
+x = 0;
+for entry in observation["list"]{
+  x = x + entry;
+}
+x;
