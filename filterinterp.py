@@ -19,9 +19,10 @@ if sys.version_info[0] >= 3:
 def make_calculator(current_observation=None):
     import filterlex
     import filterparse
-
+    import math
 
     variables = {'filteron' : False}       # Dictionary of stored variables
+    functions = {'sin' : math.sin, 'cos' : math.cos, 'tan' : math.tan, 'ceil' : math.ceil, 'abs' : math.fabs, 'factorial' : math.factorial, 'floor' : math.floor, 'isinf' : math.isinf, 'isnan' : math.isnan, 'exp' : math.exp, 'log' : math.log, 'log10' : math.log10, 'sqrt' : math.sqrt, 'acos' : math.acos, 'asin' : math.asin, 'atan' : math.atan, 'degrees' : math.degrees, 'radians' : math.radians, 'cosh' : math.cosh, 'sinh' : math.sinh, 'tanh' : math.tanh, 'acosh' : math.acosh, 'asinh' : math.asinh, 'atanh' : math.atanh}
     def nodeTyper(nodeType, nodeActionType, nodeAction):
         if nodeType == 'STATEMENTLIST':
             return statementListActions(nodeActionType, nodeAction)
@@ -166,6 +167,8 @@ def make_calculator(current_observation=None):
     def expressionGlobals(nodeAction):
         if nodeAction == 'OBSERVATION':
             return lambda x : current_observation
+        elif nodeAction == 'FUNCTION':
+            return lambda x : functions[x[0]](evaluate(x[1]))
         else:
             return lambda x : 'EXPRESSION GLOBALS ERROR'
 
@@ -174,6 +177,14 @@ def make_calculator(current_observation=None):
             return lambda x : retrieveVariable(x[0])
         elif nodeAction == 'ASSIGN':
             return lambda x: variableAssignment(x[0], evaluate(x[1]))
+        elif nodeAction == 'PLUSEQ':
+            return lambda x: variableAssignment(x[0], retrieveVariable(x[0]) + evaluate(x[1]))
+        elif nodeAction == 'MINEQ':
+            return lambda x: variableAssignment(x[0], retrieveVariable(x[0]) - evaluate(x[1]))
+        elif nodeAction == 'MULEQ':
+            return lambda x: variableAssignment(x[0], retrieveVariable(x[0]) * evaluate(x[1]))
+        elif nodeAction == 'DIVEQ':
+            return lambda x: variableAssignment(x[0], retrieveVariable(x[0]) / evaluate(x[1]))
         else:
             return lambda x : 'EXPRESSION LOCALS ERROR'
 

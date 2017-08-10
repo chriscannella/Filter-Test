@@ -4,8 +4,8 @@ import ply.yacc as yacc
 tokens = filterlex.tokens
 # ------- Calculator tokenizing rules
 precedence = (
-    ('left', '+', '-'),
-    ('left', 'MULTIPLY', '/'),
+    ('left', 'PLUS', 'MINUS'),
+    ('left', 'MULTIPLY', 'DIVIDE'),
     ('right', 'UMINUS'),
 )
 
@@ -52,10 +52,10 @@ def p_statement_expr(p):
     p[0] = ('STATEMENT','DO', 'EVALUATE', p[1])
 
 def p_expression_binop(p):
-    '''expression : expression '+' expression
-                  | expression '-' expression
+    '''expression : expression PLUS expression
+                  | expression MINUS expression
                   | expression MULTIPLY expression
-                  | expression '/' expression
+                  | expression DIVIDE expression
                   | expression IN expression
                   | expression EQ expression
                   | expression NEQ expression
@@ -90,7 +90,7 @@ def p_expression_binop(p):
         p[0] = ('EXPRESSION', 'BINOP', 'POWER', p[1], p[3])
 
 def p_expression_uminus(p):
-    "expression : '-' expression %prec UMINUS"
+    "expression : MINUS expression %prec UMINUS"
     p[0] = ('EXPRESSION', 'UNOP', 'UMINUS', p[2])
 
 def p_expression_group(p):
@@ -117,9 +117,27 @@ def p_expression_observation(p):
     "expression : OBSERVATION"
     p[0] = ('EXPRESSION', 'GLOBAL', 'OBSERVATION')
 
+def p_expression_function(p):
+    "expression : NAME '(' expression ')'"
+    p[0] = ('EXPRESSION', 'GLOBAL', 'FUNCTION', p[1], p[3])
+
 def p_expression_assign(p):
     '''expression : NAME ASSIGN expression'''
     p[0] = ('EXPRESSION', 'LOCAL', 'ASSIGN', p[1], p[3])
+
+def p_expression_opassign(p):
+    '''expression : NAME PLUSEQ expression
+                  | NAME MINEQ expression
+                  | NAME MULEQ expression
+                  | NAME DIVEQ expression'''
+    if p[2] == '+=':
+        p[0] = ('EXPRESSION', 'LOCAL', 'PLUSEQ', p[1], p[3])
+    if p[2] == '-=':
+        p[0] = ('EXPRESSION', 'LOCAL', 'MINEQ', p[1], p[3])
+    if p[2] == '*=':
+        p[0] = ('EXPRESSION', 'LOCAL', 'MULEQ', p[1], p[3])
+    if p[2] == '/=':
+        p[0] = ('EXPRESSION', 'LOCAL', 'DIVEQ', p[1], p[3])
 
 
 def p_expression_name(p):
