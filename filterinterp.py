@@ -1,206 +1,207 @@
-# -----------------------------------------------------------------------------
-# calc.py
-#
-# A calculator parser that makes use of closures. The function make_calculator()
-# returns a function that accepts an input string and returns a result.  All
-# lexing rules, parsing rules, and internal state are held inside the function.
-# -----------------------------------------------------------------------------
+import filterlex
+import filterparse
+import math
 
-import sys
-sys.path.insert(0, "../..")
+class FilterInterpreter():
+    def __init__(self):
+        self.initializeVariables()
+        self.initializeFunctions()
+        self.filterProgram = ""
+        self.current_observation = {}
 
-if sys.version_info[0] >= 3:
-    raw_input = input
+    def initializeVariables(self):
+        self.variables = {'filteron' : False}
 
-# Make a calculator function
+    def initializeFunctions(self):
+        self.functions = {'sin' : math.sin, 'cos' : math.cos, 'tan' : math.tan, 'ceil' : math.ceil, 'abs' : math.fabs, 'factorial' : math.factorial, 'floor' : math.floor, 'isinf' : math.isinf, 'isnan' : math.isnan, 'exp' : math.exp, 'log' : math.log, 'log10' : math.log10, 'sqrt' : math.sqrt, 'acos' : math.acos, 'asin' : math.asin, 'atan' : math.atan, 'degrees' : math.degrees, 'radians' : math.radians, 'cosh' : math.cosh, 'sinh' : math.sinh, 'tanh' : math.tanh, 'acosh' : math.acosh, 'asinh' : math.asinh, 'atanh' : math.atanh, 'len' : len}
 
+    def initializeFilterProgram(self, filterText):
+        unquoted = filterText.split('"')[::2]
+        quoted = filterText.split('"')[1::2]
+        formattedText = unquoted + quoted
+        formattedText[::2] = [substring.lower() for substring in unquoted]
+        formattedText[1::2] = quoted
+        self.filterProgram = '"'.join(formattedText)
 
+    def setCurrentObservation(self, current_observation):
+        self.current_observation = current_observation
 
-def make_calculator(current_observation=None):
-    import filterlex
-    import filterparse
-    import math
-
-    variables = {'filteron' : False}       # Dictionary of stored variables
-    functions = {'sin' : math.sin, 'cos' : math.cos, 'tan' : math.tan, 'ceil' : math.ceil, 'abs' : math.fabs, 'factorial' : math.factorial, 'floor' : math.floor, 'isinf' : math.isinf, 'isnan' : math.isnan, 'exp' : math.exp, 'log' : math.log, 'log10' : math.log10, 'sqrt' : math.sqrt, 'acos' : math.acos, 'asin' : math.asin, 'atan' : math.atan, 'degrees' : math.degrees, 'radians' : math.radians, 'cosh' : math.cosh, 'sinh' : math.sinh, 'tanh' : math.tanh, 'acosh' : math.acosh, 'asinh' : math.asinh, 'atanh' : math.atanh}
-    def nodeTyper(nodeType, nodeActionType, nodeAction):
+    def nodeTyper(self, nodeType, nodeActionType, nodeAction):
         if nodeType == 'STATEMENTLIST':
-            return statementListActions(nodeActionType, nodeAction)
+            return self.statementListActions(nodeActionType, nodeAction)
         if nodeType == 'STATEMENTBLOCK':
-            return statementBlockActions(nodeActionType, nodeAction)
+            return self.statementBlockActions(nodeActionType, nodeAction)
         elif nodeType == 'STATEMENT':
-            return statementActions(nodeActionType, nodeAction)
+            return self.statementActions(nodeActionType, nodeAction)
         elif nodeType == 'EXPRESSION':
-            return expressionActions(nodeActionType, nodeAction)
+            return self.expressionActions(nodeActionType, nodeAction)
         else:
             return lambda x: 'NODE TYPE ERROR'
 
-    def statementListActions(nodeActionType, nodeAction):
+    def statementListActions(self, nodeActionType, nodeAction):
         if nodeActionType == 'GATHER':
-            return statementListGather(nodeAction)
+            return self.statementListGather(nodeAction)
         else:
             return lambda x: 'STATEMENT LIST ERROR'
 
-    def statementBlockActions(nodeActionType, nodeAction):
+    def statementBlockActions(self, nodeActionType, nodeAction):
         if nodeActionType == 'GATHER':
-            return statementBlockGather(nodeAction)
+            return self.statementBlockGather(nodeAction)
         if nodeActionType == 'CONTROL':
-            return statementBlockControl(nodeAction)
+            return self.statementBlockControl(nodeAction)
         else:
             return lambda x: 'STATEMENT BLOCK ERROR'
 
-    def statementActions(nodeActionType, nodeAction):
+    def statementActions(self, nodeActionType, nodeAction):
         if nodeActionType == 'DO':
-            return statementDo(nodeAction)
+            return self.statementDo(nodeAction)
         else:
             return lambda x: 'STATEMENT ACTION ERROR'
 
-    def expressionActions(nodeActionType, nodeAction):
+    def expressionActions(self, nodeActionType, nodeAction):
         if nodeActionType == 'BINOP':
-            return expressionBinops(nodeAction)
+            return self.expressionBinops(nodeAction)
         elif nodeActionType == 'CONSTANT':
-            return expressionConstants(nodeAction)
+            return self.expressionConstants(nodeAction)
         elif nodeActionType == 'UNOP':
-            return expressionUnops(nodeAction)
+            return self.expressionUnops(nodeAction)
         elif nodeActionType == 'MODIFY':
-            return expressionModifications(nodeAction)
+            return self.expressionModifications(nodeAction)
         elif nodeActionType == 'GLOBAL':
-            return expressionGlobals(nodeAction)
+            return self.expressionGlobals(nodeAction)
         elif nodeActionType == 'LOCAL':
-            return expressionLocals(nodeAction)
+            return self.expressionLocals(nodeAction)
         else:
             return lambda x: 'EXPRESSION ACTION ERROR'
 
-    def statementListGather(nodeAction):
+    def statementListGather(self, nodeAction):
         if nodeAction == 'LIST':
-            return lambda x: [evaluate(node) for node in x]
+            return lambda x: ([self.evaluate(node) for node in x] and self.variables['filteron'])
         else:
             return lambda x: 'STATEMENTLIST ERROR'
 
-    def statementBlockGather(nodeAction):
+    def statementBlockGather(self, nodeAction):
         if nodeAction == 'BRACKET':
-            return lambda x: [evaluate(node) for node in x]
+            return lambda x: [self.evaluate(node) for node in x]
         else:
             return lambda x: 'STATEMENT BLOCK GATHER ERROR'
 
-    def statementBlockControl(nodeAction):
+    def statementBlockControl(self, nodeAction):
         if nodeAction == 'WHILE':
-            return whileFunction
+            return self.whileFunction
         elif nodeAction == 'CFOR':
-            return cforFunction
+            return self.cforFunction
         elif nodeAction == 'PYFOR':
-            pyforStep = lambda x : lambda nextVal : (variableAssignment(x[0], nextVal), evaluate(x[2]))
-            return lambda x: map(pyforStep(x), evaluate(x[1]))
+            pyforStep = lambda x : lambda nextVal : (variableAssignment(x[0], nextVal), self.evaluate(x[2]))
+            return lambda x: map(pyforStep(x), self.evaluate(x[1]))
         elif nodeAction == 'IFTHEN':
-            ifthenFunction = lambda x : (evaluate(x[0]) and evaluate(x[1]))
+            ifthenFunction = lambda x : (self.evaluate(x[0]) and self.evaluate(x[1]))
             return ifthenFunction
         elif nodeAction == 'IFTHENELSE':
-            ifthenelseFunction = lambda x : (evaluate(x[0]) and evaluate(x[1])) or (evaluate(x[2]))
+            ifthenelseFunction = lambda x : (self.evaluate(x[0]) and self.evaluate(x[1])) or (self.evaluate(x[2]))
             return ifthenelseFunction
         else:
             return lambda x: 'STATEMENT BLOCK CONTROL ERROR'
 
-    def whileFunction(x):
-        while evaluate(x[0]):
-            evaluate(x[1])
+    def whileFunction(self, x):
+        while self.evaluate(x[0]):
+            self.evaluate(x[1])
         return None
 
-    def cforFunction(x):
-        evaluate(x[0])
-        while evaluate(x[1]):
-            evaluate(x[2])
-            evaluate(x[3])
+    def cforFunction(self, x):
+        self.evaluate(x[0])
+        while self.evaluate(x[1]):
+            self.evaluate(x[2])
+            self.evaluate(x[3])
         return None
 
-    def statementDo(nodeAction):
+    def statementDo(self, nodeAction):
         if nodeAction == 'EVALUATE':
-            return lambda x: evaluate(x[0])
+            return lambda x: self.evaluate(x[0])
         elif nodeAction == 'FILTERON':
-            return lambda x : variables['filteron']
+            return lambda x : self.variableAssignment('filteron', bool(self.evaluate(x[0])))
         else:
             return lambda x: 'STATEMENT DO ERROR'
 
-
-
-    def expressionBinops(nodeAction):
+    def expressionBinops(self, nodeAction):
         if nodeAction == 'ADD':
-            return lambda x: evaluate(x[0]) + evaluate(x[1])
+            return lambda x: self.evaluate(x[0]) + self.evaluate(x[1])
         elif nodeAction == 'SUBTRACT':
-            return lambda x: evaluate(x[0]) - evaluate(x[1])
+            return lambda x: self.evaluate(x[0]) - self.evaluate(x[1])
         elif nodeAction == 'MULTIPLY':
-            return lambda x: evaluate(x[0]) * evaluate(x[1])
+            return lambda x: self.evaluate(x[0]) * self.evaluate(x[1])
         elif nodeAction == 'DIVIDE':
-            return lambda x: evaluate(x[0]) / evaluate(x[1])
+            return lambda x: self.evaluate(x[0]) / self.evaluate(x[1])
         elif nodeAction == 'IN':
-            return lambda x: evaluate(x[0]) in evaluate(x[1])
+            return lambda x: self.evaluate(x[0]) in self.evaluate(x[1])
         elif nodeAction == 'EQ':
-            return lambda x: evaluate(x[0]) == evaluate(x[1])
+            return lambda x: self.evaluate(x[0]) == self.evaluate(x[1])
         elif nodeAction == 'NEQ':
-            return lambda x: evaluate(x[0]) != evaluate(x[1])
+            return lambda x: self.evaluate(x[0]) != self.evaluate(x[1])
         elif nodeAction == 'GEQ':
-            return lambda x: evaluate(x[0]) >= evaluate(x[1])
+            return lambda x: self.evaluate(x[0]) >= self.evaluate(x[1])
         elif nodeAction == 'LEQ':
-            return lambda x: evaluate(x[0]) <= evaluate(x[1])
+            return lambda x: self.evaluate(x[0]) <= self.evaluate(x[1])
         elif nodeAction == 'SG':
-            return lambda x: evaluate(x[0]) > evaluate(x[1])
+            return lambda x: self.evaluate(x[0]) > self.evaluate(x[1])
         elif nodeAction == 'SL':
-            return lambda x: evaluate(x[0]) < evaluate(x[1])
+            return lambda x: self.evaluate(x[0]) < self.evaluate(x[1])
         elif nodeAction == 'POWER':
-            return lambda x: evaluate(x[0]) ** evaluate(x[1])
+            return lambda x: self.evaluate(x[0]) ** self.evaluate(x[1])
         else:
             return lambda x: 'EXPRESSION BINOP ERROR'
 
-    def expressionUnops(nodeAction):
+    def expressionUnops(self, nodeAction):
         if nodeAction == 'UMINUS':
-            return lambda x : - evaluate(x[0])
+            return lambda x : - self.evaluate(x[0])
         else:
             return lambda x : 'EXPRESSION UNOP ERROR'
 
-    def expressionModifications(nodeAction):
+    def expressionModifications(self, nodeAction):
         if nodeAction == 'PARENS':
-            return lambda x : evaluate(x[0])
+            return lambda x : self.evaluate(x[0])
         if nodeAction == 'FIELD':
-            return lambda x : evaluate(x[0])[evaluate(x[1])]
+            return lambda x : self.evaluate(x[0])[self.evaluate(x[1])]
         else:
             return lambda x : 'EXPRESSION MODIFIER ERROR'
 
-    def expressionGlobals(nodeAction):
+    def expressionGlobals(self, nodeAction):
         if nodeAction == 'OBSERVATION':
-            return lambda x : current_observation
+            return lambda x : self.current_observation
         elif nodeAction == 'FUNCTION':
-            return lambda x : functions[x[0]](evaluate(x[1]))
+            return lambda x : self.functions[x[0]](self.evaluate(x[1]))
         else:
             return lambda x : 'EXPRESSION GLOBALS ERROR'
 
-    def expressionLocals(nodeAction):
+    def expressionLocals(self, nodeAction):
         if nodeAction == 'NAME':
-            return lambda x : retrieveVariable(x[0])
+            return lambda x : self.retrieveVariable(x[0])
         elif nodeAction == 'ASSIGN':
-            return lambda x: variableAssignment(x[0], evaluate(x[1]))
+            return lambda x: self.variableAssignment(x[0], self.evaluate(x[1]))
         elif nodeAction == 'PLUSEQ':
-            return lambda x: variableAssignment(x[0], retrieveVariable(x[0]) + evaluate(x[1]))
+            return lambda x: self.variableAssignment(x[0], self.retrieveVariable(x[0]) + self.evaluate(x[1]))
         elif nodeAction == 'MINEQ':
-            return lambda x: variableAssignment(x[0], retrieveVariable(x[0]) - evaluate(x[1]))
+            return lambda x: self.variableAssignment(x[0], self.retrieveVariable(x[0]) - self.evaluate(x[1]))
         elif nodeAction == 'MULEQ':
-            return lambda x: variableAssignment(x[0], retrieveVariable(x[0]) * evaluate(x[1]))
+            return lambda x: self.variableAssignment(x[0], self.retrieveVariable(x[0]) * self.evaluate(x[1]))
         elif nodeAction == 'DIVEQ':
-            return lambda x: variableAssignment(x[0], retrieveVariable(x[0]) / evaluate(x[1]))
+            return lambda x: self.variableAssignment(x[0], self.retrieveVariable(x[0]) / self.evaluate(x[1]))
         else:
             return lambda x : 'EXPRESSION LOCALS ERROR'
 
-    def variableAssignment(variableName, variableValue):
-        variables[variableName] = variableValue
+    def variableAssignment(self, variableName, variableValue):
+        self.variables[variableName] = variableValue
         return True
 
-    def retrieveVariable(variableName):
+    def retrieveVariable(self, variableName):
         variableValue = None
         try:
-            variableValue = variables[variableName]
+            variableValue = self.variables[variableName]
         except:
             variableValue = 'VARIABLE RETRIEVAL ERROR'
         return variableValue
 
-    def expressionConstants(nodeAction):
+    def expressionConstants(self, nodeAction):
         if nodeAction == 'NUMBER':
             return lambda x: x[0]
         elif nodeAction == 'STRING':
@@ -210,25 +211,15 @@ def make_calculator(current_observation=None):
         else:
             return lambda x: 'EXPRESSION CONSTANT ERROR'
 
-    def evaluate(node):
+    def evaluate(self, node):
         nodeType = node[0]
         nodeActionType = node[1]
         nodeAction = node[2]
         nodeArguments = node[3:]
-        return nodeTyper(nodeType, nodeActionType, nodeAction)(nodeArguments)
+        return self.nodeTyper(nodeType, nodeActionType, nodeAction)(nodeArguments)
 
-    def interpret(text):
-        syntaxtree = filterparse.parser.parse(text, lexer=filterlex.lexer)
-        return evaluate(syntaxtree)
+    def interpret(self):
+        syntaxtree = filterparse.parser.parse(self.filterProgram, lexer=filterlex.lexer)
+        return self.evaluate(syntaxtree)
 
-    return interpret
 
-# Make a calculator object and use it
-testDict = {'details' : {'mag' : 3}, 'list' : [1, 2, 3, 4, 55]}
-calc = make_calculator(testDict)
-testDict['details']['mag'] = 4
-inputFile = open('testFilter.txt', 'r')
-r = calc(inputFile.read().lower())
-if r:
-    print(r)
-inputFile.close()
