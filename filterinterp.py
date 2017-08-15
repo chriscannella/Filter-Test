@@ -7,6 +7,7 @@ class FilterInterpreter():
         self.initializeVariables()
         self.initializeFunctions()
         self.filterProgram = ""
+        self.syntaxtree = None
         self.current_observation = {}
 
     def initializeVariables(self):
@@ -22,6 +23,7 @@ class FilterInterpreter():
         formattedText[::2] = [substring.lower() for substring in unquoted]
         formattedText[1::2] = quoted
         self.filterProgram = '"'.join(formattedText)
+        self.syntaxtree = filterparse.parser.parse(self.filterProgram, lexer=filterlex.lexer)
 
     def setCurrentObservation(self, current_observation):
         self.current_observation = current_observation
@@ -225,7 +227,6 @@ class FilterInterpreter():
         return self.nodeTyper(nodeType, nodeActionType, nodeAction)(nodeArguments)
 
     def interpret(self):
-        syntaxtree = filterparse.parser.parse(self.filterProgram, lexer=filterlex.lexer)
-        return self.evaluate(syntaxtree)
+        return self.evaluate(self.syntaxtree)
 
 
