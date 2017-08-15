@@ -14,7 +14,10 @@ reserved = {
     'while' : 'WHILE',
     'for' : 'FOR',
     'if' : 'IF',
-    'else': 'ELSE'
+    'else': 'ELSE',
+    'and' : 'AND',
+    'or' : 'OR',
+    'not' : 'NOT'
 }
 
 tokens += reserved.values()

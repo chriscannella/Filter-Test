@@ -1,2 +1,18 @@
-x = 90;
-degrees(asin(sin(radians(x))));
+rising = False;
+currentFilterID = observation["candidate"]["fid"];
+currentMagnitude = observation["candidate"]["magpsf"];
+currentDate = observation["candidate"]["jd"];
+prevCandidates = observation["prv_candidates"];
+if (prevCandidates) {
+    filterMatch = False;
+    for (i = len(prevCandidates) - 1; (i >= 0) and (not filterMatch); i -= 1) {
+        lastFilterID = prevCandidates[i]["fid"];
+        filterMatch = lastFilterID == currentFilterID;
+        if (filterMatch) {
+            lastMagnitude = prevCandidates[i]["magpsf"];
+            lastDate = prevCandidates[i]["jd"];
+            rising = ((lastMagnitude - currentMagnitude)/(currentDate - lastDate)) > 0;
+        }
+    }
+}
+filteron rising;

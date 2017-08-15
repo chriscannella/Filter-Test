@@ -148,12 +148,18 @@ class FilterInterpreter():
             return lambda x: self.evaluate(x[0]) < self.evaluate(x[1])
         elif nodeAction == 'POWER':
             return lambda x: self.evaluate(x[0]) ** self.evaluate(x[1])
+        elif nodeAction == 'AND':
+            return lambda x: self.evaluate(x[0]) and self.evaluate(x[1])
+        elif nodeAction == 'OR':
+            return lambda x: self.evaluate(x[0]) or self.evaluate(x[1])
         else:
             return lambda x: 'EXPRESSION BINOP ERROR'
 
     def expressionUnops(self, nodeAction):
         if nodeAction == 'UMINUS':
             return lambda x : - self.evaluate(x[0])
+        elif nodeAction == 'NOT':
+            return lambda x : not self.evaluate(x[0])
         else:
             return lambda x : 'EXPRESSION UNOP ERROR'
 

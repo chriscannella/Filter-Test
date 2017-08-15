@@ -19,11 +19,11 @@ def p_statementlist_statementblock(p):
 
 def p_statementblock_statement(p):
     '''statementblock : '{' statementlist '}'
-                      | WHILE '(' expression ')' '{' statementblock '}'
-                      | IF '(' expression ')' '{' statementblock '}'
-                      | IF '(' expression ')' '{' statementblock '}' ELSE '{' statementblock '}'
-                      | FOR '(' expression ';' expression ';' expression ')' '{' statementblock '}'
-                      | FOR NAME IN expression '{' statementblock '}' 
+                      | WHILE '(' expression ')' '{' statementlist '}'
+                      | IF '(' expression ')' '{' statementlist '}'
+                      | IF '(' expression ')' '{' statementlist '}' ELSE '{' statementlist '}'
+                      | FOR '(' expression ';' expression ';' expression ')' '{' statementlist '}'
+                      | FOR NAME IN expression '{' statementlist '}' 
                       | statement ';' '''
     if(len(p) > 4):
         if p[1] == 'while':
@@ -63,7 +63,9 @@ def p_expression_binop(p):
                   | expression LEQ expression
                   | expression SG expression
                   | expression SL expression
-                  | expression POWER expression'''
+                  | expression POWER expression
+                  | expression AND expression
+                  | expression OR expression'''
     if p[2] == '+':
         p[0] =  ('EXPRESSION', 'BINOP', 'ADD', p[1], p[3])
     elif p[2] == '-':
@@ -88,10 +90,19 @@ def p_expression_binop(p):
         p[0] = ('EXPRESSION', 'BINOP', 'SL', p[1], p[3])
     elif p[2] == '**':
         p[0] = ('EXPRESSION', 'BINOP', 'POWER', p[1], p[3])
+    elif p[2] == 'and':
+        p[0] = ('EXPRESSION', 'BINOP', 'AND', p[1], p[3])
+    elif p[2] == 'or':
+        p[0] = ('EXPRESSION', 'BINOP', 'OR', p[1], p[3])
+
 
 def p_expression_uminus(p):
     "expression : MINUS expression %prec UMINUS"
     p[0] = ('EXPRESSION', 'UNOP', 'UMINUS', p[2])
+
+def p_expression_not(p):
+    "expression : NOT expression"
+    p[0] = ('EXPRESSION', 'UNOP', 'NOT', p[2])
 
 def p_expression_group(p):
     "expression : '(' expression ')'"
