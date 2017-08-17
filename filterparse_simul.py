@@ -1,3 +1,4 @@
+import math
 import filterlex
 import ply.yacc as yacc
 
@@ -9,9 +10,37 @@ class FilterParser():
         ('right', 'UMINUS'),
     )
     def __init__(self):
+        self.initializeVariables()
+        self.initializeFunctions()
+        self.filterProgram = ""
+        self.syntaxtree = None
         self.tokens = filterlex.tokens
         self.lexer = filterlex
         self.build()
+        self.current_observation = {}
+
+    def initializeVariables(self):
+        self.variables = {'filteron' : False}
+
+    def initializeFunctions(self):
+        self.functions = {'sin' : math.sin, 'cos' : math.cos, 'tan' : math.tan, 'ceil' : math.ceil, 'abs' : math.fabs, 'factorial' : math.factorial, 'floor' : math.floor, 'isinf' : math.isinf, 'isnan' : math.isnan, 'exp' : math.exp, 'log' : math.log, 'log10' : math.log10, 'sqrt' : math.sqrt, 'acos' : math.acos, 'asin' : math.asin, 'atan' : math.atan, 'degrees' : math.degrees, 'radians' : math.radians, 'cosh' : math.cosh, 'sinh' : math.sinh, 'tanh' : math.tanh, 'acosh' : math.acosh, 'asinh' : math.asinh, 'atanh' : math.atanh, 'len' : len}
+
+    def initializeFilterProgram(self, filterText):
+        unquoted = filterText.split('"')[::2]
+        quoted = filterText.split('"')[1::2]
+        formattedText = unquoted + quoted
+        formattedText[::2] = [substring.lower() for substring in unquoted]
+        formattedText[1::2] = quoted
+        self.filterProgram = '"'.join(formattedText)
+        self.initializeVariables()
+        self.initializeFunctions()
+        self.syntaxtree = self.parser.parse(self.filterProgram, lexer=filterlex.lexer)
+
+    def interpret(self):
+        return self.syntaxtree[0](self.syntaxtree[1])
+
+    def setCurrentObservation(self, current_observation):
+        self.current_observation = current_observation
 
     def build(self):
         self.parser = yacc.yacc(module=self)
@@ -20,10 +49,25 @@ class FilterParser():
         '''statementlist : statementlist statementblock
                          | statementblock '''
         if(len(p) > 2):
-            p[0] = ('STATEMENTLIST','GATHER', 'LIST',  p[1], p[2])
+            p[0] = (lambda x: ([node[0](node[1]) for node in x] and self.variables['filteron']),  (p[1], p[2]))
         else:
-            p[0] = ('STATEMENTLIST', 'GATHER', 'LIST', p[1])
+            p[0] = (lambda x: (x[0](x[1]) and self.variables['filteron']), (p[1]))
     
+    def whileFunction(self, x):
+        while x[0][0](x[0][1]):
+            x[1][0](x[1][1])
+        return None
+
+    def cforFunction(self, x):
+        x[0][0](x[0][1])
+        while x[1][0](x[1][1]):
+            x[2][0](x[2][1])
+            x[3][0](x[3][1])
+        return None
+
+    def pyforStep(self, x):
+        return lambda nextVal : (variableAssignment(x[0], nextVal), x[2][0](x[2][1]))
+
     def p_statementblock_statement(self, p):
         '''statementblock : '{' statementlist '}'
                           | WHILE '(' expression ')' '{' statementlist '}'
@@ -34,29 +78,29 @@ class FilterParser():
                           | statement ';' '''
         if(len(p) > 4):
             if p[1] == 'while':
-                p[0] = ('STATEMENTBLOCK', 'CONTROL', 'WHILE', p[3], p[6])
+                p[0] = (self.whileFunction, (p[3], p[6]))
             elif p[1] == 'if':
                 if len(p) > 8:
-                    p[0] = ('STATEMENTBLOCK', 'CONTROL', 'IFTHENELSE', p[3], p[6], p[10])
+                    p[0] = (lambda x : (x[0][0](x[0][1]) and x[1][0](x[1][1])) or (x[2][0](x[2])), (p[3], p[6], p[10]))
                 else:
-                    p[0] = ('STATEMENTBLOCK', 'CONTROL', 'IFTHEN', p[3], p[6])
+                    p[0] = (lambda x : (x[0][0](x[0][1]) and x[1][0](x[1][1])), (p[3], p[6]))
             elif p[1] == 'for':
                 if len(p) > 8:
-                    p[0] = ('STATEMENTBLOCK', 'CONTROL', 'CFOR', p[3], p[5], p[7], p[10])
+                    p[0] = (self.cforFunction, (p[3], p[5], p[7], p[10]))
                 else:
-                    p[0] = ('STATEMENTBLOCK', 'CONTROL', 'PYFOR', p[2], p[4], p[6])
+                    p[0] = (lambda x: map(pyforStep(x), x[1][0](x[1][1])), (p[2], p[4], p[6]))
         elif(len(p) > 3):
-            p[0] = ('STATEMENTBLOCK', 'GATHER', 'BRACKET', p[2])
+            p[0] = (lambda x: x[0](x[1]), (p[2]))
         else:
-            p[0] = ('STATEMENTBLOCK', 'GATHER', 'BRACKET', p[1])
+            p[0] = (lambda x: x[0](x[1]), (p[1]))
     
     def p_statement_filteron(self, p):
         'statement : FILTERON expression'
-        p[0] = ('STATEMENT', 'DO', 'FILTERON', p[2])
+        p[0] = (lambda x : self.variableAssignment('filteron', bool(x[0](x[1]))), (p[2]))
     
     def p_statement_expr(self, p):
         'statement : expression'
-        p[0] = ('STATEMENT','DO', 'EVALUATE', p[1])
+        p[0] = (lambda x: x[0](x[1]), (p[1]))
     
     def p_expression_binop(self, p):
         '''expression : expression PLUS expression
@@ -74,74 +118,78 @@ class FilterParser():
                       | expression AND expression
                       | expression OR expression'''
         if p[2] == '+':
-            p[0] =  ('EXPRESSION', 'BINOP', 'ADD', p[1], p[3])
+            p[0] =  (lambda x: x[0][0](x[0][1]) + x[1][0](x[1][1]), (p[1], p[3]))
         elif p[2] == '-':
-            p[0] = ('EXPRESSION', 'BINOP', 'SUBTRACT', p[1], p[3])
+            p[0] =  (lambda x: x[0][0](x[0][1]) - x[1][0](x[1][1]), (p[1], p[3]))
         elif p[2] == '*':
-            p[0] = ('EXPRESSION', 'BINOP', 'MULTIPLY', p[1], p[3])
+            p[0] =  (lambda x: x[0][0](x[0][1]) * x[1][0](x[1][1]), (p[1], p[3]))
         elif p[2] == '/':
-            p[0] = ('EXPRESSION', 'BINOP', 'DIVIDE', p[1], p[3])
+            p[0] =  (lambda x: x[0][0](x[0][1]) / x[1][0](x[1][1]), (p[1], p[3]))
         elif p[2] == 'in':
-            p[0] = ('EXPRESSION', 'BINOP', 'IN', p[1], p[3])
+            p[0] =  (lambda x: x[0][0](x[0][1]) in x[1][0](x[1][1]), (p[1], p[3]))
         elif p[2] == '==':
-            p[0] = ('EXPRESSION', 'BINOP', 'EQ', p[1], p[3])
+            p[0] =  (lambda x: x[0][0](x[0][1]) == x[1][0](x[1][1]), (p[1], p[3]))
         elif p[2] == '!=':
-            p[0] = ('EXPRESSION', 'BINOP', 'NEQ', p[1], p[3])
+            p[0] =  (lambda x: x[0][0](x[0][1]) != x[1][0](x[1][1]), (p[1], p[3]))
         elif p[2] == '>=':
-            p[0] = ('EXPRESSION', 'BINOP', 'GEQ', p[1], p[3])
+            p[0] =  (lambda x: x[0][0](x[0][1]) >= x[1][0](x[1][1]), (p[1], p[3]))
         elif p[2] == '<=':
-            p[0] = ('EXPRESSION', 'BINOP', 'LEQ', p[1], p[3])
+            p[0] =  (lambda x: x[0][0](x[0][1]) <= x[1][0](x[1][1]), (p[1], p[3]))
         elif p[2] == '>':
-            p[0] = ('EXPRESSION', 'BINOP', 'SG', p[1], p[3])
+            p[0] =  (lambda x: x[0][0](x[0][1]) > x[1][0](x[1][1]), (p[1], p[3]))
         elif p[2] == '<':
-            p[0] = ('EXPRESSION', 'BINOP', 'SL', p[1], p[3])
+            p[0] =  (lambda x: x[0][0](x[0][1]) < x[1][0](x[1][1]), (p[1], p[3]))
         elif p[2] == '**':
-            p[0] = ('EXPRESSION', 'BINOP', 'POWER', p[1], p[3])
+            p[0] =  (lambda x: x[0][0](x[0][1]) ** x[1][0](x[1][1]), (p[1], p[3]))
         elif p[2] == 'and':
-            p[0] = ('EXPRESSION', 'BINOP', 'AND', p[1], p[3])
+            p[0] =  (lambda x: x[0][0](x[0][1]) and x[1][0](x[1][1]), (p[1], p[3]))
         elif p[2] == 'or':
-            p[0] = ('EXPRESSION', 'BINOP', 'OR', p[1], p[3])
+            p[0] =  (lambda x: x[0][0](x[0][1]) or x[1][0](x[1][1]), (p[1], p[3]))
     
     
     def p_expression_uminus(self, p):
         "expression : MINUS expression %prec UMINUS"
-        p[0] = ('EXPRESSION', 'UNOP', 'UMINUS', p[2])
+        p[0] = (lambda x : - x[0](x[1]), (p[2]))
     
     def p_expression_not(self, p):
         "expression : NOT expression"
-        p[0] = ('EXPRESSION', 'UNOP', 'NOT', p[2])
+        p[0] = (lambda x : not x[0](x[1]), (p[2]))
     
     def p_expression_group(self, p):
         "expression : '(' expression ')'"
-        p[0] = ('EXPRESSION', 'MODIFY', 'PARENS', p[2])
+        p[0] = (lambda x : x[0](x[1]), (p[2]))
     
     def p_expression_field(self, p):
         "expression : expression '[' expression ']'"
-        p[0] = ('EXPRESSION', 'MODIFY', 'FIELD', p[1], p[3])
+        p[0] = (lambda x : x[0][0](x[0][1])[x[1][0](x[1][1])], (p[1], p[3]))
     
     def p_expression_bool(self, p):
         '''expression : BOOL'''
-        p[0] = ('EXPRESSION', 'CONSTANT', 'BOOL', p[1])
+        p[0] = (lambda x : x == 'true', (p[1]))
     
     def p_expression_number(self, p):
         "expression : NUMBER"
-        p[0] = ('EXPRESSION', 'CONSTANT', 'NUMBER', p[1])
+        p[0] = (lambda x: x, (p[1]))
     
     def p_expression_string(self, p):
         "expression : STRING"
-        p[0] = ('EXPRESSION', 'CONSTANT', 'STRING', p[1])
+        p[0] = (lambda x: x, (p[1]))
     
     def p_expression_observation(self, p):
         "expression : OBSERVATION"
-        p[0] = ('EXPRESSION', 'GLOBAL', 'OBSERVATION')
+        p[0] = (lambda x : self.current_observation, ())
     
     def p_expression_function(self, p):
         "expression : NAME '(' expression ')'"
-        p[0] = ('EXPRESSION', 'GLOBAL', 'FUNCTION', p[1], p[3])
+        p[0] = (lambda x : self.functions[x[0]](x[1][0](x[1][1])), (p[1], p[3]))
     
+    def variableAssignment(self, variableName, variableValue):
+        self.variables[variableName] = variableValue
+        return True
+
     def p_expression_assign(self, p):
         '''expression : NAME ASSIGN expression'''
-        p[0] = ('EXPRESSION', 'LOCAL', 'ASSIGN', p[1], p[3])
+        p[0] = (lambda x: self.variableAssignment(x[0], x[1][0](x[1][1])), (p[1], p[3]))
     
     def p_expression_opassign(self, p):
         '''expression : NAME PLUSEQ expression
@@ -149,22 +197,18 @@ class FilterParser():
                       | NAME MULEQ expression
                       | NAME DIVEQ expression'''
         if p[2] == '+=':
-            p[0] = ('EXPRESSION', 'LOCAL', 'PLUSEQ', p[1], p[3])
+            p[0] = (lambda x: self.variableAssignment(x[0], self.variables[x[0]] + x[1][0](x[1][1])), (p[1], p[3]))
         if p[2] == '-=':
-            p[0] = ('EXPRESSION', 'LOCAL', 'MINEQ', p[1], p[3])
+            p[0] = (lambda x: self.variableAssignment(x[0], self.variables[x[0]] - x[1][0](x[1][1])), (p[1], p[3]))
         if p[2] == '*=':
-            p[0] = ('EXPRESSION', 'LOCAL', 'MULEQ', p[1], p[3])
+            p[0] = (lambda x: self.variableAssignment(x[0], self.variables[x[0]] * x[1][0](x[1][1])), (p[1], p[3]))
         if p[2] == '/=':
-            p[0] = ('EXPRESSION', 'LOCAL', 'DIVEQ', p[1], p[3])
+            p[0] = (lambda x: self.variableAssignment(x[0], self.variables[x[0]] / x[1][0](x[1][1])), (p[1], p[3]))
     
     
     def p_expression_name(self, p):
         "expression : NAME"
-        p[0] = ('EXPRESSION', 'LOCAL', 'NAME', p[1])
-    
-    def p_expression_test(self, p):
-        "expression : TEST"
-        p[0] = ('EXPRESSION', 'TEST', 'TEST')
+        p[0] = (lambda x: self.variables[x], (p[1]))
     
     def p_error(self, p):
         if p:
