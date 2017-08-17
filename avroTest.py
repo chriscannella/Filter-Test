@@ -8,7 +8,7 @@ import filterinterp_opcode
 inputFile = open('testFilter.txt', 'r')
 filterProgram = inputFile.read()
 inputFile.close()
-calc = filterinterp.FilterInterpreter()
+calc = filterinterp_opcode.FilterInterpreter()
 calc.initializeFilterProgram(filterProgram)
 
 accepts = []

@@ -1,5 +1,5 @@
 import filterlex
-import filterparse_opcode
+import filterparse_simul
 import math
 
 class FilterInterpreter():
@@ -9,7 +9,7 @@ class FilterInterpreter():
         self.filterProgram = ""
         self.syntaxtree = None
         self.current_observation = {}
-        self.parser = filterparse_opcode.FilterParser()
+        self.parser = filterparse_simul.FilterParser()
 
     def initializeVariables(self):
         self.variables = {'filteron' : False}
