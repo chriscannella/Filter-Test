@@ -3,7 +3,7 @@ from avro.io import DatumReader
 
 reader = DataFileReader(open("test_Ia_hsiao.avro", "rb"), DatumReader())
 
-import filterinterp
+import filterinterp_opcode
 # Make a calculator object and use it
 inputFile = open('testFilter.txt', 'r')
 filterProgram = inputFile.read()

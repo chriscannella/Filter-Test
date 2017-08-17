@@ -1,5 +1,5 @@
 import filterlex
-import filterparse
+import filterparse_opcode
 import math
 
 class FilterInterpreter():
