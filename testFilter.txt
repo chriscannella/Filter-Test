@@ -1,4 +1,4 @@
-rising = False;
+falling = False;
 currentFilterID = observation["candidate"]["fid"];
 currentMagnitude = observation["candidate"]["magpsf"];
 currentDate = observation["candidate"]["jd"];
@@ -11,8 +11,8 @@ if (prevCandidates) {
         if (filterMatch) {
             lastMagnitude = prevCandidates[i]["magpsf"];
             lastDate = prevCandidates[i]["jd"];
-            rising = ((lastMagnitude - currentMagnitude)/(currentDate - lastDate)) > 0;
+            falling = ((lastMagnitude - currentMagnitude)/(currentDate - lastDate)) < 0;
         }
     }
 }
-filteron rising;
+filteron falling;
